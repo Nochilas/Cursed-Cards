@@ -16,6 +16,7 @@ const czarInfo = document.getElementById("czarInfo");
 drawBlackBtn.style.display = "none";
 startRoundBtn.style.display = "none";
 
+/** Loads the current game state. */
 async function loadState() {
     const res = await fetch(`/game-state/${roomId}`, {
         method: "GET"
@@ -66,6 +67,9 @@ async function loadState() {
         blackCardDiv.textContent = currentBlackCard;
         countRequiredBlanks();
     }
+
+    // The czar will see the winner selection menu
+    renderWinnerSelection(apiResponse);
 }
 
 /** Renders the player hand. */
@@ -133,7 +137,60 @@ function countRequiredBlanks() {
     blanksRequired = (currentBlackCard.match(/_/g) || []).length || 1;
 }
 
-// CZAR ACTION: draw black card
+/** Render winner selection for the czar. */
+function renderWinnerSelection(apiResponse) {
+    const container = document.getElementById("czarSelectionContainer");
+    const title = document.getElementById("czarSelectionTitle");
+
+    // Reset
+    container.innerHTML = "";
+    title.style.display = "none";
+
+    // Show only when the round is over
+    if (apiResponse.roundStatus !== 2) {
+        return;
+    }
+
+    // Only the czar can see the answers
+    if (apiResponse.czar !== playerName) {
+        container.textContent = "Czar picking winner...";
+        return;
+    }
+
+    // Show all answers for czar
+    title.style.display = "block";
+
+    const playedCards = apiResponse.playedCards ?? {};
+
+    Object.entries(playedCards).forEach(([player, cards]) => {
+        const btn = document.createElement("button");
+        btn.className = "czar-choice-btn";
+        btn.textContent = `${player}: ${cards.join(" | ")}`;
+
+        btn.onclick = () => selectWinner(player);
+
+        container.appendChild(btn);
+    });
+}
+
+/** Czar selects the winner. */
+async function selectWinner(winnerPlayer) {
+    const res = await fetch(`/select-winner?roomId=${roomId}&czarPlayerName=${playerName}&winnerPlayer=${winnerPlayer}`, {
+        method: "POST"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        alert(data.errorMessage);
+        return;
+    }
+
+    // TODO improve render
+    alert("Winner selected:", winnerPlayer);
+}
+
+/** CZAR ACTION: draw black card */ 
 drawBlackBtn.onclick = async () => {
     const res = await fetch(`/draw-black/${roomId}`, { method: "POST" });
     const data = await res.json();
@@ -152,7 +209,7 @@ drawBlackBtn.onclick = async () => {
     }
 };
 
-// CZAR ACTION: start round
+/** CZAR ACTION: start round */ 
 startRoundBtn.onclick = async () => {
     const res = await fetch(`/start-round/${roomId}/${playerName}`, { method: "POST" });
     const data = await res.json();
@@ -164,7 +221,7 @@ startRoundBtn.onclick = async () => {
 };
 
 
-// Player submits chosen cards
+/** Player submits chosen cards */
 submitBtn.onclick = async () => {
     const body = {
         selectedCards: selectedCards

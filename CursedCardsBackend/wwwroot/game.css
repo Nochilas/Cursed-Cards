@@ -47,7 +47,6 @@ body {
     cursor: not-allowed !important;
 }
 
-
 .hand {
     display: flex;
     flex-wrap: wrap;
@@ -78,4 +77,18 @@ body {
     font-size: 1.1em;
     display: none;
     cursor: pointer;
+}
+
+.czar-choice-btn {
+    padding: 10px;
+    margin: 6px 0;
+    border: 2px solid #333;
+    background: #fafafa;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.czar-choice-btn:hover {
+    background: #e6e6e6;
 }

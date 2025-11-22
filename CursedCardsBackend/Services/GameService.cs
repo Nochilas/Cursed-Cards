@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CursedCardsBackend.Enums;
 using CursedCardsBackend.Managers;
 using CursedCardsBackend.Models;
 
@@ -84,6 +85,53 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
         }
 
         return drawnCards;
+    }
+
+    /// <summary>
+    /// Selects the player that won the round.
+    /// </summary>
+    public void SelectWinner(string roomId, string winnerPlayer, GameState gameState)
+    {
+        // Check if the player has a score
+        if (!gameState.Scores.TryGetValue(winnerPlayer, out int value))
+        {
+            // If he has not, init score at 0
+            value = 0;
+            gameState.Scores[winnerPlayer] = value;
+        }
+
+        // Update score and game status
+        gameState.Scores[winnerPlayer] = value += 1;
+        gameState.Czar = winnerPlayer;
+        gameState.RoundStatus = RoundStatus.Finished;
+
+        // Reset
+        gameState.PlayedCards = [];
+        gameState.CurrentBlackCard = null;
+
+        // Update
+        WriteGameState(gameState);
+    }
+
+    /// <summary>
+    /// Check if all the players except the czar have played their cards.s
+    /// </summary>
+    public void IsRoundComplete(GameState gameState)
+    {
+        // Count how many players must play (all except the czar)
+        var playersThatMustPlay = gameState.Players
+            .Where(players => players != gameState.Czar)
+            .Count();
+
+        // Count how many have already played
+        var playersThatPlayed = gameState.PlayedCards.Count;
+
+        // If all non-czar players have played, the round is over
+        // And the status changes, now the czar must pick the winner
+        if (playersThatPlayed == playersThatMustPlay)
+        {
+            gameState.RoundStatus = RoundStatus.CzarPicking;
+        }
     }
 
     /// <summary>

@@ -53,4 +53,9 @@ public class GameState
     /// Cards played in this round.
     /// </summary>
     public Dictionary<string, List<string>> PlayedCards { get; set; } = [];
+
+    /// <summary>
+    /// Score of the game.
+    /// </summary>
+    public Dictionary<string, int> Scores { get; set; } = [];
 }
