@@ -42,6 +42,12 @@ body {
     background: #5e35b1;
 }
 
+.disabled-btn {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
 .hand {
     display: flex;
     flex-wrap: wrap;

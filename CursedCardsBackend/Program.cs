@@ -208,6 +208,11 @@ app.MapPost("/start-round/{roomId}/{player}", (
         return Results.BadRequest(new ApiErrorResponse("No black card drawn"));
     }
 
+    if (gameState.RoundStatus == RoundStatus.InProgress)
+    {
+        return Results.BadRequest(new ApiErrorResponse("Round already in progress"));
+    }
+
     // Reset previous round data
     gameState.PlayedCards.Clear();
     gameState.RoundStatus = RoundStatus.InProgress;
