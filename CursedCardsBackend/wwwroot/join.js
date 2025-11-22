@@ -33,7 +33,7 @@ document.getElementById("joinBtn").addEventListener("click", async () => {
         }
 
         const data = await res.json();
-        resultDiv.textContent = `You joined the game as ${data.playerName}!`;
+        resultDiv.textContent = `You joined the game as ${data.response}!`;
 
         // TODO: reindirizzare alla schermata di lobby
         // window.location.href = `/lobby.html?roomId=${roomId}&player=${username}`;

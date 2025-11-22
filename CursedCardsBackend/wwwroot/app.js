@@ -7,11 +7,12 @@ document.getElementById("createGameBtn").addEventListener("click", async () => {
             method: "POST"
         });
 
-        if (!res.ok) throw new Error("API Error");
+        if (!res.ok) {
+            throw new Error("API Error");
+        }
 
         const data = await res.json();
-        resultDiv.textContent = `Game link: http://localhost:5291/join.html?roomId=${data.roomId}`;
-
+        resultDiv.textContent = `Game link: http://localhost:5291/join.html?roomId=${data.response}`;
     } catch (err) {
         resultDiv.textContent = "An error occurred while creating the game.";
         console.error(err);
