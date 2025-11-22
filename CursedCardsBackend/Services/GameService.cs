@@ -46,7 +46,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
                 quantity: 10,
                 gameState.WhiteDeck);
 
-            gameState.Hands[playerName] = drawCardsResult.PlayerHand;
+            gameState.Hands[playerName].AddRange(drawCardsResult.DrawnCards);
             gameState.WhiteDeck = drawCardsResult.UpdatedDeck;
         }
 
@@ -63,18 +63,18 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
     {
         // Draw X random cards
         var random = new Random();
-        var hand = new List<string>();
+        var drawnCards = new List<string>();
 
         for (int i = 0; i < quantity; i++)
         {
             int index = random.Next(deck.Count);
 
             // Adds a card to the player hand and removes it from the deck
-            hand.Add(deck[index]);
+            drawnCards.Add(deck[index]);
             deck.RemoveAt(index);
         }
 
-        return new(hand, deck);
+        return new(drawnCards, deck);
     }
 
     /// <summary>

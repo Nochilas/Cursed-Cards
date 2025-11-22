@@ -50,7 +50,6 @@ app.MapPost("/join-game/{roomId}/{playerName}", (
 
     // Join
     gameService.JoinRoom(playerName, gameState);
-
     return Results.Ok(new ApiSuccessResponse<string>(playerName));
 });
 
@@ -83,8 +82,8 @@ app.MapPost("/draw-white/{roomId}/{player}/{quantity}", (
             quantity,
             [.. gameState.WhiteDeck]);
 
-    // Update the player hand
-    gameState.Hands[player] = drawCardsResult.PlayerHand;
+    // Update
+    gameState.Hands[player].AddRange(drawCardsResult.DrawnCards);
     gameState.WhiteDeck = drawCardsResult.UpdatedDeck;
 
     // Update
@@ -107,7 +106,7 @@ app.MapPost("/draw-black/{roomId}", (
         return Results.NotFound(new ApiErrorResponse("Room not found"));
     }
 
-    // Check remaining white cards
+    // Check remaining black cards
     if (gameService.NoCardsLeft(gameState.BlackDeck.Count, 1))
     {
         return Results.BadRequest(new ApiErrorResponse("No more black cards"));
@@ -119,7 +118,8 @@ app.MapPost("/draw-black/{roomId}", (
             quantity: 1,
             [.. gameState.BlackDeck]);
 
-    gameState.CurrentBlackCard = drawCardsResult.PlayerHand[0];
+    // Update
+    gameState.CurrentBlackCard = drawCardsResult.DrawnCards[0];
     gameState.BlackDeck = drawCardsResult.UpdatedDeck;
 
     // Update
