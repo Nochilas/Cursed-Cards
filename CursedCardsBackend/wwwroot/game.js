@@ -55,6 +55,10 @@ async function loadState() {
             disableButton(startRoundBtn);
         }
     } else {
+        // Hide buttons from the former czar (now a player)
+        drawBlackBtn.style.display = "none";
+        startRoundBtn.style.display = "none";
+
         // Only the players can see their hand
         hand = apiResponse.hands[playerName] ?? [];
         renderHand();
