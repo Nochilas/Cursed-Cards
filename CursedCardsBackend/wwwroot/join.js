@@ -34,10 +34,12 @@ document.getElementById("joinBtn").addEventListener("click", async () => {
 
         const data = await res.json();
         resultDiv.textContent = `You joined the game as ${data.response}!`;
+        
+        // Disable the join button after the player successfully joins
+        document.getElementById("joinBtn").disabled = true;
 
-        // TODO: reindirizzare alla schermata di lobby
+        // TODO: redirect to lobby page
         // window.location.href = `/lobby.html?roomId=${roomId}&player=${username}`;
-
     } catch (err) {
         resultDiv.textContent = "An error occurred while joining the game.";
         console.error(err);
