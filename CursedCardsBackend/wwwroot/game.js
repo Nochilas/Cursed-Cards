@@ -227,19 +227,34 @@ submitBtn.onclick = async () => {
         selectedCards: selectedCards
     };
 
-    const res = await fetch(`/play-cards/${roomId}/${playerName}`, {
+    const playCardsResponse = await fetch(`/play-cards/${roomId}/${playerName}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
     });
 
-    const data = await res.json();
+    const data = await playCardsResponse.json();
 
-    if (res.ok) {
+    if (playCardsResponse.ok) {
         console.log("Cards sent successfully");
         disableButton(submitBtn);
     } else {
         alert(data.errorMessage);
+    }
+
+    // After the player played the cards, they are gone
+    // So the player draws new cards (same number of played cards)
+    const drawCardsResult = await fetch(`/draw-white/${roomId}/${playerName}/${blanksRequired}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
+    const drawCardsData = await drawCardsResult.json();
+    if (drawCardsResult.ok) {
+        console.log("New cards drawn successfully");
+    } else {
+        alert(drawCardsData.errorMessage)
     }
 };
 

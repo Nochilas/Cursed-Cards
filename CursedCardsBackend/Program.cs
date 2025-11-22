@@ -270,8 +270,12 @@ app.MapPost("/play-cards/{roomId}/{playerName}", (
         return Results.BadRequest(new { errorMessage = "No black card selected" });
     }
 
-    // Save
+    // Update the played cards
     gameState.PlayedCards[playerName] = selectedCards.SelectedCards;
+
+    // Remove played cards from player hand
+    gameState.Hands[playerName] = [.. gameState.Hands[playerName]
+        .Where(card => !selectedCards.SelectedCards.Contains(card))];
 
     // Check if the round is complete (all players have played their cards)
     gameService.IsRoundComplete(gameState);
