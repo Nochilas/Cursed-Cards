@@ -31,4 +31,14 @@ public class GameState
     /// Indicates the current black card.
     /// </summary>
     public string? CurrentBlackCard { get; set; }
+
+    /// <summary>
+    /// The player that's currently the game czar.
+    /// </summary>
+    public string? Czar { get; set; }
+
+    /// <summary>
+    /// Indicates if the game has started.
+    /// </summary>
+    public bool GameStarted { get; set; }
 }
