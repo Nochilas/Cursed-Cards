@@ -24,22 +24,35 @@ document.getElementById("joinBtn").addEventListener("click", async () => {
     resultDiv.textContent = "Connecting...";
 
     try {
-        const res = await fetch(`/join-game/${roomId}/${playerName}`, {
+        // The player joins the game
+        const joinGameResult = await fetch(`/join-game/${roomId}/${playerName}`, {
             method: "POST"
         });
 
         // Check for errors
-        if (!res.ok) {
-            const errorData = await res.json();
+        if (!joinGameResult.ok) {
+            const errorData = await joinGameResult.json();
             resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
             return;
         }
 
-        const data = await res.json();
+        const data = await joinGameResult.json();
         resultDiv.textContent = `You joined the game as ${data.response}!`;
 
         // Disable the join button after the player successfully joins
         document.getElementById("joinBtn").disabled = true;
+
+        // Draw the starting deck for the player that joined
+        const drawCardsResult = await fetch(`/draw-white/${roomId}/${playerName}/10`, {
+            method: "POST"
+        });
+
+        // Check for errors
+        if (!drawCardsResult.ok) {
+            const errorData = await drawCardsResult.json();
+            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
+            return;
+        }
 
         // TODO: redirect to lobby page
         // window.location.href = `/lobby.html?roomId=${roomId}&player=${username}`;
