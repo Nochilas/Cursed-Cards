@@ -28,13 +28,16 @@ document.getElementById("joinBtn").addEventListener("click", async () => {
             method: "POST"
         });
 
+        // Check for errors
         if (!res.ok) {
-            throw new Error("API Error");
+            const errorData = await res.json();
+            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
+            return;
         }
 
         const data = await res.json();
         resultDiv.textContent = `You joined the game as ${data.response}!`;
-        
+
         // Disable the join button after the player successfully joins
         document.getElementById("joinBtn").disabled = true;
 

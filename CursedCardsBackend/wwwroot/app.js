@@ -7,8 +7,11 @@ document.getElementById("createGameBtn").addEventListener("click", async () => {
             method: "POST"
         });
 
+        // Check for errors
         if (!res.ok) {
-            throw new Error("API Error");
+            const errorData = await res.json();
+            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
+            return;
         }
 
         const data = await res.json();
