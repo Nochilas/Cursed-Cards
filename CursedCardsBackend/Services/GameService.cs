@@ -1,12 +1,15 @@
 using System.Text.Json;
 using CursedCardsBackend.Managers;
 using CursedCardsBackend.Models;
-using CursedCardsBackend.Services.Models;
 
 namespace CursedCardsBackend.Services;
 
 public class GameService(GameManager gameManager, JsonSerializerOptions serializerOptions)
 {
+    /// <summary>
+    /// Four players for now.
+    /// </summary>
+    private readonly int _minPlayers = 4;
     private readonly string _badCardsPath = "badCards.json";
 
     /// <summary>
@@ -42,12 +45,20 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
         // Draws a starting hand for the player
         if (!gameState.Hands.ContainsKey(playerName))
         {
-            var drawCardsResult = DrawCards(
+            var drawnCards = DrawCards(
                 quantity: 10,
                 gameState.WhiteDeck);
 
-            gameState.Hands[playerName].AddRange(drawCardsResult.DrawnCards);
-            gameState.WhiteDeck = drawCardsResult.UpdatedDeck;
+            gameState.Hands[playerName] = drawnCards;
+        }
+
+        // If czar is not set, choose a random player
+        if (string.IsNullOrEmpty(gameState.Czar)
+            && gameState.Players.Count >= _minPlayers)
+        {
+            var random = new Random();
+            int index = random.Next(gameState.Players.Count);
+            gameState.Czar = gameState.Players[index];
         }
 
         // Update
@@ -57,9 +68,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
     /// <summary>
     /// Draws a specific amount of cards for a specific player.
     /// </summary>
-    public DrawCardsResult DrawCards(
-        int quantity,
-        List<string> deck)
+    public List<string> DrawCards(int quantity, List<string> deck)
     {
         // Draw X random cards
         var random = new Random();
@@ -74,7 +83,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
             deck.RemoveAt(index);
         }
 
-        return new(drawnCards, deck);
+        return drawnCards;
     }
 
     /// <summary>

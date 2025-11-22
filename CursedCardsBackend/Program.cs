@@ -77,14 +77,11 @@ app.MapPost("/draw-white/{roomId}/{player}/{quantity}", (
     }
 
     // Draw
-    var drawCardsResult = gameService
+    var drawnCards = gameService
         .DrawCards(
             quantity,
-            [.. gameState.WhiteDeck]);
-
-    // Update
-    gameState.Hands[player].AddRange(drawCardsResult.DrawnCards);
-    gameState.WhiteDeck = drawCardsResult.UpdatedDeck;
+            gameState.WhiteDeck);
+    gameState.Hands[player].AddRange(drawnCards);
 
     // Update
     gameService.WriteGameState(gameState);
@@ -113,18 +110,59 @@ app.MapPost("/draw-black/{roomId}", (
     }
 
     // Draw
-    var drawCardsResult = gameService
+    gameState.CurrentBlackCard = gameService
         .DrawCards(
             quantity: 1,
-            [.. gameState.BlackDeck]);
-
-    // Update
-    gameState.CurrentBlackCard = drawCardsResult.DrawnCards[0];
-    gameState.BlackDeck = drawCardsResult.UpdatedDeck;
+            [.. gameState.BlackDeck])[0];
 
     // Update
     gameService.WriteGameState(gameState);
     return Results.Ok(new ApiSuccessResponse<string>(gameState.CurrentBlackCard));
+});
+
+/// <summary>
+/// Opens the room lobby.
+/// </summary>
+app.MapGet("/lobby-state/{roomId}", (
+    string roomId,
+    GameService gameService) =>
+{
+    var gameState = gameService.ReadGameState();
+    if (!gameService.CheckRoomId(roomId, gameState.RoomId))
+        return Results.NotFound(new ApiErrorResponse("Room not found"));
+
+    var lobbyDto = new LobbyDTO(
+        gameState.Players,
+        gameState.Czar,
+        gameState.GameStarted);
+
+    return Results.Ok(new ApiSuccessResponse<LobbyDTO>(lobbyDto));
+});
+
+/// <summary>
+/// Starts the game.
+/// Only the czar can call this endpoint.
+/// </summary>
+app.MapPost("/start-game/{roomId}/{player}", (
+    string roomId,
+    string player,
+    GameService gameService) =>
+{
+    var gameState = gameService.ReadGameState();
+    if (!gameService.CheckRoomId(roomId, gameState.RoomId))
+    {
+        return Results.NotFound(new ApiErrorResponse("Room not found"));
+    }
+
+    if (!string.Equals(gameState.Czar, player))
+    {
+        return Results.BadRequest(new ApiErrorResponse("You are not the Czar"));
+    }
+
+    gameState.GameStarted = true;
+    gameService.WriteGameState(gameState);
+
+    return Results.Ok(new ApiSuccessResponse<string>("Game started"));
 });
 
 // Start the app
