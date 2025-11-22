@@ -40,11 +40,14 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
         gameState.Players.Add(playerName);
 
         // Draws a starting hand for the player
-        // TODO fix draw (make it random)
         if (!gameState.Hands.ContainsKey(playerName))
         {
-            gameState.Hands[playerName] = [.. gameState.WhiteDeck.Take(10)];
-            gameState.WhiteDeck.RemoveRange(0, 10);
+            var drawCardsResult = DrawCards(
+                quantity: 10,
+                gameState.WhiteDeck);
+
+            gameState.Hands[playerName] = drawCardsResult.PlayerHand;
+            gameState.WhiteDeck = drawCardsResult.UpdatedDeck;
         }
 
         // Update
