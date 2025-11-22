@@ -77,6 +77,10 @@ function renderHand() {
         div.className = "card";
         div.textContent = card;
 
+        if (selectedCards.includes(card)) {
+            div.classList.add("selected");
+        }
+
         div.onclick = () => selectCard(card, div);
 
         handContainer.appendChild(div);
@@ -176,7 +180,7 @@ submitBtn.onclick = async () => {
 
     if (res.ok) {
         console.log("Cards sent successfully");
-        submitBtn.style.display = "none";
+        disableButton(submitBtn);
     } else {
         alert(data.errorMessage);
     }

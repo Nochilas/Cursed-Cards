@@ -44,7 +44,7 @@ body {
 
 .disabled-btn {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 }
 
 
@@ -77,4 +77,5 @@ body {
     border-radius: 8px;
     font-size: 1.1em;
     display: none;
+    cursor: pointer;
 }
