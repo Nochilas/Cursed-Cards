@@ -80,15 +80,17 @@ body {
 }
 
 .czar-choice-btn {
+    color: #fff;
     padding: 10px;
     margin: 6px 0;
-    border: 2px solid #333;
-    background: #fafafa;
+    border: none;
+    border-radius: 6px;
+    background: #673ab7;
     cursor: pointer;
     width: 100%;
-    text-align: left;
+    text-align: center;
 }
 
 .czar-choice-btn:hover {
-    background: #e6e6e6;
+    background: #5e35b1;
 }
