@@ -129,12 +129,10 @@ startRoundBtn.onclick = async () => {
 // Player submits chosen cards
 submitBtn.onclick = async () => {
     const body = {
-        player: playerName,
-        cards: selectedCards
+        selectedCards: selectedCards
     };
 
-    // TODO api
-    const res = await fetch(`/play-cards/${roomId}`, {
+    const res = await fetch(`/play-cards/${roomId}/${playerName}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
