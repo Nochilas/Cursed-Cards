@@ -165,7 +165,7 @@ function renderWinnerSelection(apiResponse) {
     Object.entries(playedCards).forEach(([player, cards]) => {
         const btn = document.createElement("button");
         btn.className = "czar-choice-btn";
-        btn.textContent = `${player}: ${cards.join(" | ")}`;
+        btn.textContent = `${cards.join(" | ")}`;
 
         btn.onclick = () => selectWinner(player);
 
@@ -187,10 +187,10 @@ async function selectWinner(winnerPlayer) {
     }
 
     // TODO improve render
-    alert("Winner selected:", winnerPlayer);
+    alert(`Winner selected: ${winnerPlayer}`);
 }
 
-/** CZAR ACTION: draw black card */ 
+/** CZAR ACTION: draw black card */
 drawBlackBtn.onclick = async () => {
     const res = await fetch(`/draw-black/${roomId}`, { method: "POST" });
     const data = await res.json();
@@ -209,7 +209,7 @@ drawBlackBtn.onclick = async () => {
     }
 };
 
-/** CZAR ACTION: start round */ 
+/** CZAR ACTION: start round */
 startRoundBtn.onclick = async () => {
     const res = await fetch(`/start-round/${roomId}/${playerName}`, { method: "POST" });
     const data = await res.json();
