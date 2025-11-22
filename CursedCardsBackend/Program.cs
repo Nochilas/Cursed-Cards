@@ -11,7 +11,11 @@ app.UseStaticFiles(); // wwwroot
 // Constants
 const string CURRENT_GAME_STATE_PATH = "currentGameState.json";
 const string BAD_CARDS_PATH = "badCards.json";
-var SERIALIZER_OPTIONS = new JsonSerializerOptions { WriteIndented = true };
+var SERIALIZER_OPTIONS = new JsonSerializerOptions
+{
+    PropertyNameCaseInsensitive = true,
+    WriteIndented = true,
+};
 
 /// <summary>
 /// Loads the current game state.
@@ -41,21 +45,20 @@ void WriteGameState(GameState gameState)
 /// </summary>
 app.MapPost("/create-game", () =>
 {
-    var gameState = ReadGameState();
     var roomId = Guid.NewGuid().ToString("N")[..6].ToUpper();
 
     // Read all cards from json
     var text = File.ReadAllText(BAD_CARDS_PATH);
-    var allCards = JsonSerializer.Deserialize<AllCards>(text);
+    var allCards = JsonSerializer.Deserialize<AllCards>(text, SERIALIZER_OPTIONS);
 
-    var game = new GameState
+    var initialGameState = new GameState
     {
         RoomId = roomId,
         WhiteDeck = allCards?.WhiteCards ?? [],
         BlackDeck = allCards?.BlackCards ?? [],
     };
 
-    WriteGameState(gameState);
+    WriteGameState(initialGameState);
 
     return Results.Ok(new { roomId });
 });
