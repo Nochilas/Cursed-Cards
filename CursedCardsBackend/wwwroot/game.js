@@ -41,7 +41,11 @@ async function loadState() {
         // If a black card is drawn, disable the draw black button and enable the start round
         if (apiResponse.currentBlackCard) {
             disableButton(drawBlackBtn);
-            enableButton(startRoundBtn);
+
+            // Enable start round button only if round hasn't started yet
+            if (apiResponse.RoundStatus === 0) {
+                enableButton(startRoundBtn);
+            }
         }
         // If a black card is not drawn, enable the draw black and disable the start round
         else {
