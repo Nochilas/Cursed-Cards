@@ -4,6 +4,10 @@ using CursedCardsBackend.Models;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+// Serve static files
+app.UseDefaultFiles(); // index.html
+app.UseStaticFiles(); // wwwroot
+
 // Constants
 const string CURRENT_GAME_STATE_PATH = "currentGameState.json";
 const string BAD_CARDS_PATH = "badCards.json";
@@ -35,7 +39,7 @@ void WriteGameState(GameState gameState)
 /// <summary>
 /// Initializes a game.
 /// </summary>
-app.MapPost("/initialize-game", () =>
+app.MapPost("/create-game", () =>
 {
     var gameState = ReadGameState();
     var roomId = Guid.NewGuid().ToString("N")[..6].ToUpper();
