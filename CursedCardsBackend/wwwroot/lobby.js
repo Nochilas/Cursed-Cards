@@ -17,12 +17,15 @@ async function refreshLobby() {
 
     const apiResponse = data.response;
 
+    // Show players
     updatePlayersList(apiResponse.players);
 
+    // Show button (only for czar)
     if (apiResponse.czar) {
         updateCzarUI(apiResponse.czar);
     }
 
+    // If the czar started the game, redirect to game page
     if (apiResponse.gameStarted) {
         redirectToGame();
     }
