@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Cursed Cards – Game</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <div class="container">
+
+        <h1 class="title">Cursed Cards – Round</h1>
+        <div id="roomInfo" class="room-info"></div>
+        <div id="czarInfo" class="czar-info"></div>
+
+        <!-- Black Card -->
+        <div id="blackCard" class="black-card">No black card</div>
+
+        <!-- Buttons visible ONLY to the czar -->
+        <button id="drawBlackBtn" class="czar-btn">Draw black card</button>
+        <button id="startRoundBtn" class="czar-btn">Start round</button>
+
+        <!-- Player Hand -->
+        <h2>Your cards</h2>
+        <div id="handContainer" class="hand"></div>
+
+        <!-- Selected cards -->
+        <h3>Selected cards</h3>
+        <ul id="selectedList"></ul>
+        <button id="submitCardsBtn" class="submit-btn">Submit</button>
+
+    </div>
+
+    <script>
+        window.roomId = new URLSearchParams(window.location.search).get("roomId");
+        window.playerName = new URLSearchParams(window.location.search).get("playerName");
+
+        document.getElementById("roomInfo").textContent = `Stanza: ${roomId}`;
+    </script>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CursedCardsBackend.Enums;
 using CursedCardsBackend.Managers;
 using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
@@ -24,6 +25,22 @@ app.MapPost("/create-game", (GameService gameService) =>
 {
     var roomId = gameService.InitializeGame();
     return Results.Ok(new ApiSuccessResponse<string>(roomId));
+});
+
+/// <summary>
+/// Loads the game state.
+/// </summary>
+app.MapGet("/game-state/{roomId}", (
+    string roomId,
+    GameService gameService) =>
+{
+    var gameState = gameService.ReadGameState();
+    if (!gameService.CheckRoomId(roomId, gameState.RoomId))
+    {
+        return Results.NotFound(new ApiErrorResponse("Room not found"));
+    }
+
+    return Results.Ok(new ApiSuccessResponse<GameState>(gameState));
 });
 
 /// <summary>
@@ -164,6 +181,42 @@ app.MapPost("/start-game/{roomId}/{player}", (
 
     return Results.Ok(new ApiSuccessResponse<string>("Game started"));
 });
+
+/// <summary>
+/// Starts a round of a game.
+/// Only the czar can call this endpoint.
+/// </summary>
+app.MapPost("/start-round/{roomId}/{player}", (
+    string roomId,
+    string player,
+    GameService gameService
+) =>
+{
+    var gameState = gameService.ReadGameState();
+    if (!gameService.CheckRoomId(roomId, gameState.RoomId))
+    {
+        return Results.NotFound(new ApiErrorResponse("Room not found"));
+    }
+
+    if (!string.Equals(gameState.Czar, player))
+    {
+        return Results.BadRequest(new ApiErrorResponse("You are not the Czar"));
+    }
+
+    if (string.IsNullOrWhiteSpace(gameState.CurrentBlackCard))
+    {
+        return Results.BadRequest(new ApiErrorResponse("No black card drawn"));
+    }
+
+    // Reset previous round data
+    gameState.PlayedCards.Clear();
+    gameState.RoundStatus = RoundStatus.InProgress;
+
+    gameService.WriteGameState(gameState);
+
+    return Results.Ok(new ApiSuccessResponse<string>("Round started"));
+});
+
 
 // Start the app
 app.Run();

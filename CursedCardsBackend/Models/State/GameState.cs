@@ -1,3 +1,5 @@
+using CursedCardsBackend.Enums;
+
 namespace CursedCardsBackend.Models;
 
 public class GameState
@@ -41,4 +43,14 @@ public class GameState
     /// Indicates if the game has started.
     /// </summary>
     public bool GameStarted { get; set; }
+
+    /// <summary>
+    /// Indicates the status of the current round.
+    /// </summary>
+    public RoundStatus RoundStatus { get; set; }
+
+    /// <summary>
+    /// Cards played in this round.
+    /// </summary>
+    public Dictionary<string, List<string>> PlayedCards { get; set; } = [];
 }
