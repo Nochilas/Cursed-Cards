@@ -49,7 +49,7 @@ body {
 }
 
 .start-btn {
-    display: none; /* mostrato solo se sei lo Czar */
+    display: none;
     width: 100%;
     padding: 12px;
     font-size: 1.2em;
