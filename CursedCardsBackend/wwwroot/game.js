@@ -146,7 +146,12 @@ function renderSelectedList() {
     });
 
     // Show button only if enough cards selected
-    submitBtn.style.display = selectedCards.length === blanksRequired ? "block" : "none";
+    if (selectedCards.length === blanksRequired) {
+        submitBtn.style.display = "block";
+        enableButton(submitBtn);
+    } else {
+        submitBtn.style.display = "none";
+    }
 }
 
 /** Disables a button. */
