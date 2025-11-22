@@ -61,6 +61,7 @@ body {
     width: 140px;
     cursor: pointer;
     user-select: none;
+    overflow-wrap: break-word;
 }
 
 .card.selected {
