@@ -53,11 +53,12 @@ async function loadState() {
             disableButton(drawBlackBtn);
             disableButton(startRoundBtn);
         }
+    } else {
+        // Only the players can see their hand
+        hand = apiResponse.hands[playerName] ?? [];
+        renderHand();
     }
 
-    // Hand
-    hand = apiResponse.hands[playerName] ?? [];
-    renderHand();
 
     // If present, count the blanks (underscores)
     if (apiResponse.currentBlackCard) {
