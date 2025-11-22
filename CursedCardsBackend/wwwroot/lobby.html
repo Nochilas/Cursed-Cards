@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Cursed Cards – Lobby</title>
+    <link rel="stylesheet" href="lobby.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Lobby</h1>
+
+        <div id="roomInfo" class="room-info"></div>
+
+        <div class="players-section">
+            <h2>Players</h2>
+            <ul id="playersList" class="players-list"></ul>
+        </div>
+
+        <div class="czar-section">
+            <p id="czarLabel" class="czar-label">Czar: —</p>
+        </div>
+
+        <button id="startBtn" class="start-btn" onclick="startGame()">Start Game</button>
+    </div>
+
+    <script>
+        // Get roomId and playerName from query string
+        const qs = new URLSearchParams(window.location.search);
+        window.roomId = qs.get("roomId");
+        window.playerName = qs.get("playerName");
+
+        document.getElementById("roomInfo").textContent = `Room: ${window.roomId}`;
+    </script>
+
+    <script src="lobby.js"></script>
+</body>
+
+</html>

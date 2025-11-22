@@ -37,25 +37,14 @@ document.getElementById("joinBtn").addEventListener("click", async () => {
         }
 
         const data = await joinGameResult.json();
-        resultDiv.textContent = `You joined the game as ${data.response}!`;
+        const username = data.response;
+        resultDiv.textContent = `You joined the game as ${username}!`;
 
         // Disable the join button after the player successfully joins
         document.getElementById("joinBtn").disabled = true;
 
-        // Draw the starting deck for the player that joined
-        const drawCardsResult = await fetch(`/draw-white/${roomId}/${playerName}/10`, {
-            method: "POST"
-        });
-
-        // Check for errors
-        if (!drawCardsResult.ok) {
-            const errorData = await drawCardsResult.json();
-            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
-            return;
-        }
-
-        // TODO: redirect to lobby page
-        // window.location.href = `/lobby.html?roomId=${roomId}&player=${username}`;
+        // Redirect to lobby page
+        window.location.href = `/lobby.html?roomId=${roomId}&playerName=${username}`;
     } catch (err) {
         resultDiv.textContent = "An error occurred while joining the game.";
         console.error(err);

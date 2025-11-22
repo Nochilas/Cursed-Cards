@@ -1,0 +1,65 @@
+body {
+    background: #1e1e1e;
+    color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.title {
+    text-align: center;
+    margin-top: 0;
+}
+
+.room-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.players-section {
+    margin-bottom: 20px;
+}
+
+.players-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.players-list li {
+    background: #3a3a3a;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+}
+
+.czar-label {
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.start-btn {
+    display: none; /* mostrato solo se sei lo Czar */
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    background: #4caf50;
+    color: white;
+    cursor: pointer;
+}
+
+.start-btn:hover {
+    background: #43a047;
+}
