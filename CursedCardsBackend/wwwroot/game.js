@@ -39,34 +39,20 @@ async function loadState() {
 
         // If a black card is drawn, disable the draw black button and enable the start round
         if (apiResponse.currentBlackCard) {
-            drawBlackBtn.disabled = true;
-            drawBlackBtn.classList.add("disabled-btn");
-
-            startRoundBtn.disabled = false;
-            startRoundBtn.classList.remove("disabled-btn");
+            disableButton(drawBlackBtn);
+            enableButton(startRoundBtn);
         }
         // If a black card is not drawn, enable the draw black and disable the start round
         else {
-            startRoundBtn.disabled = true;
-            startRoundBtn.classList.add("disabled-btn");
-
-            drawBlackBtn.disabled = false;
-            drawBlackBtn.classList.remove("disabled-btn");
+            disableButton(startRoundBtn);
+            enableButton(drawBlackBtn);
         }
 
         // If the round has started, disable both buttons
         if (apiResponse.roundStatus == 1) {
-            drawBlackBtn.disabled = true;
-            drawBlackBtn.classList.add("disabled-btn");
-
-            startRoundBtn.disabled = true;
-            startRoundBtn.classList.add("disabled-btn");
+            disableButton(drawBlackBtn);
+            disableButton(startRoundBtn);
         }
-    } else {
-        // Other players can't see the buttons
-        // TODO: check if this else can be deleted
-        drawBlackBtn.style.display = "none";
-        startRoundBtn.style.display = "none";
     }
 
     // Hand
@@ -77,7 +63,7 @@ async function loadState() {
     if (apiResponse.currentBlackCard) {
         currentBlackCard = apiResponse.currentBlackCard;
         blackCardDiv.textContent = currentBlackCard;
-        blanksRequired = (currentBlackCard.match(/_/g) || []).length || 1;
+        countRequiredBlanks();
     }
 }
 
@@ -125,6 +111,23 @@ function renderSelectedList() {
     submitBtn.style.display = selectedCards.length === blanksRequired ? "block" : "none";
 }
 
+/** Disables a button. */
+function disableButton(btn) {
+    btn.disabled = true;
+    btn.classList.add("disabled-btn");
+}
+
+/** Enables a button. */
+function enableButton(btn) {
+    btn.disabled = false;
+    btn.classList.remove("disabled-btn");
+}
+
+/** Counts the blanks (underscores) in a black card. */
+function countRequiredBlanks() {
+    blanksRequired = (currentBlackCard.match(/_/g) || []).length || 1;
+}
+
 // CZAR ACTION: draw black card
 drawBlackBtn.onclick = async () => {
     const res = await fetch(`/draw-black/${roomId}`, { method: "POST" });
@@ -134,16 +137,13 @@ drawBlackBtn.onclick = async () => {
         currentBlackCard = data.response;
         blackCardDiv.textContent = currentBlackCard;
 
-        // TODO check the other line
-        blanksRequired = (currentBlackCard.match(/_/g) || []).length || 1;
+        countRequiredBlanks();
 
         // Disable the draw button to avoid another draw
-        drawBlackBtn.disabled = true;
-        drawBlackBtn.classList.add("disabled-btn");
+        disableButton(drawBlackBtn);
 
         // Now the round can start
-        startRoundBtn.style.display = "block";
-        startRoundBtn.classList.remove("disabled-btn");
+        enableButton(startRoundBtn);
     }
 };
 
