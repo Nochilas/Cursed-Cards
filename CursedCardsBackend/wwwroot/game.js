@@ -33,6 +33,28 @@ async function loadState() {
     // Czar info
     czarInfo.textContent = `Czar: ${apiResponse.czar}`;
 
+    if (apiResponse.roundStatus === 0
+        || apiResponse.roundStatus === 3) {
+        // If the game hasn't started and there's no card, reset the card UI
+        if (!apiResponse.currentBlackCard) {
+            currentBlackCard = "";
+            blackCardDiv.textContent = "No black card";
+        }
+
+        // Reset player selections
+        selectedCards = [];
+        selectedList.innerHTML = "";
+
+        // Hide submit button
+        submitBtn.style.display = "none";
+
+        // If this player is the new czar, hide his hand
+        if (apiResponse.czar === playerName) {
+            hand = [];
+            handContainer.innerHTML = "";
+        }
+    }
+
     // Only the czar can see the "draw black card" and "start round" buttons
     if (apiResponse.czar === playerName) {
         drawBlackBtn.style.display = "block";
@@ -68,8 +90,7 @@ async function loadState() {
         renderHand();
     }
 
-
-    // If present, count the blanks (underscores)
+    // Check for the black card on every render
     if (apiResponse.currentBlackCard) {
         currentBlackCard = apiResponse.currentBlackCard;
         blackCardDiv.textContent = currentBlackCard;
