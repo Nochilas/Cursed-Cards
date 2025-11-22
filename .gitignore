@@ -1,5 +1,9 @@
 badCards.json
+currentGameState.json
+roadmap.md
 
 # Ignore any files in /bin and /obj Folders
 bin
 obj
+
+.vscode
