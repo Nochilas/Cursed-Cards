@@ -73,11 +73,14 @@ app.MapPost("/join-game/{roomId}/{playerName}", (string roomId, string playerNam
         return Results.NotFound("Room not found");
     }
 
-    // Adds a player, if not already in
-    if (!gameState.Players.Contains(playerName))
+    // Checks if player is already in
+    if (gameState.Players.Contains(playerName))
     {
-        gameState.Players.Add(playerName);
+        return Results.BadRequest("Username already taken");
     }
+
+    // Adds a player, if not already in
+    gameState.Players.Add(playerName);
 
     // Draws a starting hand for the player
     if (!gameState.Hands.ContainsKey(playerName))
