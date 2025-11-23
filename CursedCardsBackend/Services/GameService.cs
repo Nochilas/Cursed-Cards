@@ -11,7 +11,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
     /// Four players for now.
     /// </summary>
     private readonly int _minPlayers = 4;
-    private readonly string _badCardsPath = "badCards.json";
+    private readonly string _cursedCardsPath = "cursedCards.json";
 
     /// <summary>
     /// Initializes a game.
@@ -21,7 +21,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
         var roomId = Guid.NewGuid().ToString("N")[..6].ToUpper();
 
         // Read all cards from json
-        var text = File.ReadAllText(_badCardsPath);
+        var text = File.ReadAllText(_cursedCardsPath);
         var allCards = JsonSerializer.Deserialize<AllCards>(text, serializerOptions);
 
         var initialGameState = new GameState
