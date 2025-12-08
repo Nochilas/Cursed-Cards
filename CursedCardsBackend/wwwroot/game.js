@@ -67,12 +67,10 @@ async function loadState() {
     if (apiResponse.czar === playerName) {
         // Czar is picking: round is finished
         if (apiResponse.roundStatus === 2) {
-            if (czarRevealing || czarPicking) {
-                return;
-            }
-
             // If czar is not revealing nor picking, setup UI for czar reveal
-            setupCzarRevealUI(apiResponse);
+            if (!czarRevealing && !czarPicking) {
+                setupCzarRevealUI(apiResponse);
+            }
         }
         // Czar is not picking: round is not finished
         else {
@@ -213,17 +211,17 @@ function countRequiredBlanks() {
 
 /** Render winner selection for the czar. */
 function renderWinnerSelection(apiResponse) {
-    // Show only when the round is over
-    if (apiResponse.roundStatus !== 2 || czarRevealing) {
-        return;
-    }
-
     const container = document.getElementById("czarSelectionContainer");
     const title = document.getElementById("czarSelectionTitle");
 
     // Reset
     container.innerHTML = "";
     title.style.display = "none";
+
+    // Show only when the round is over
+    if (apiResponse.roundStatus !== 2 || czarRevealing) {
+        return;
+    }
 
     // Only the czar can see the answers
     if (apiResponse.czar !== playerName) {
