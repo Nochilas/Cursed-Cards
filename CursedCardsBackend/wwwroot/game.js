@@ -1,3 +1,10 @@
+// State variables (card reveal)
+let revealIndex = 0;
+let revealOrder = [];
+let state = {};
+let czarRevealing = false;
+let czarPicking = false;
+
 let currentBlackCard = "";
 let blanksRequired = 1;
 let selectedCards = [];
@@ -29,6 +36,7 @@ async function loadState() {
     }
 
     const apiResponse = data.response;
+    state = apiResponse;
 
     // Czar info
     czarInfo.textContent = `Czar: ${apiResponse.czar}`;
@@ -57,28 +65,40 @@ async function loadState() {
 
     // Only the czar can see the "draw black card" and "start round" buttons
     if (apiResponse.czar === playerName) {
-        drawBlackBtn.style.display = "block";
-        startRoundBtn.style.display = "block";
-
-        // If a black card is drawn, disable the draw black button and enable the start round
-        if (apiResponse.currentBlackCard) {
-            disableButton(drawBlackBtn);
-
-            // Enable start round button only if round hasn't started yet
-            if (apiResponse.RoundStatus === 0) {
-                enableButton(startRoundBtn);
+        // Czar is picking: round is finished
+        if (apiResponse.roundStatus === 2) {
+            if (czarRevealing || czarPicking) {
+                return;
             }
-        }
-        // If a black card is not drawn, enable the draw black and disable the start round
-        else {
-            disableButton(startRoundBtn);
-            enableButton(drawBlackBtn);
-        }
 
-        // If the round has started, disable both buttons
-        if (apiResponse.roundStatus == 1) {
-            disableButton(drawBlackBtn);
-            disableButton(startRoundBtn);
+            // If czar is not revealing nor picking, setup UI for czar reveal
+            setupCzarRevealUI(apiResponse);
+        }
+        // Czar is not picking: round is not finished
+        else {
+            drawBlackBtn.style.display = "block";
+            startRoundBtn.style.display = "block";
+
+            // If a black card is drawn, disable the draw black button and enable the start round
+            if (apiResponse.currentBlackCard) {
+                disableButton(drawBlackBtn);
+
+                // Enable start round button only if round hasn't started yet
+                if (apiResponse.RoundStatus === 0) {
+                    enableButton(startRoundBtn);
+                }
+            }
+            // If a black card is not drawn, enable the draw black and disable the start round
+            else {
+                disableButton(startRoundBtn);
+                enableButton(drawBlackBtn);
+            }
+
+            // If the round has started, disable both buttons
+            if (apiResponse.roundStatus == 1) {
+                disableButton(drawBlackBtn);
+                disableButton(startRoundBtn);
+            }
         }
     } else {
         // Hide buttons from the former czar (now a player)
@@ -99,6 +119,26 @@ async function loadState() {
 
     // The czar will see the winner selection menu
     renderWinnerSelection(apiResponse);
+}
+
+/** Sets up the UI for czar card reveal. */
+function setupCzarRevealUI(apiResponse) {
+    // Hide played cards
+    hideCzarSelectionContainer();
+
+    // Show "step by step" reveal UI
+    document.getElementById("czarRevealArea").style.display = "block";
+
+    // Shuffle the player order
+    revealOrder = Object.keys(apiResponse.playedCards);
+    shuffle(revealOrder);
+
+    revealIndex = 0;
+
+    // Reset UI
+    document.getElementById("showCardsBtn").style.display = "block";
+    document.getElementById("czarSingleReveal").innerHTML = "";
+    document.getElementById("nextCardBtn").style.display = "none";
 }
 
 /** Renders the player hand. */
@@ -173,17 +213,17 @@ function countRequiredBlanks() {
 
 /** Render winner selection for the czar. */
 function renderWinnerSelection(apiResponse) {
+    // Show only when the round is over
+    if (apiResponse.roundStatus !== 2 || czarRevealing) {
+        return;
+    }
+
     const container = document.getElementById("czarSelectionContainer");
     const title = document.getElementById("czarSelectionTitle");
 
     // Reset
     container.innerHTML = "";
     title.style.display = "none";
-
-    // Show only when the round is over
-    if (apiResponse.roundStatus !== 2) {
-        return;
-    }
 
     // Only the czar can see the answers
     if (apiResponse.czar !== playerName) {
@@ -220,8 +260,56 @@ async function selectWinner(winnerPlayer) {
         return;
     }
 
+    czarPicking = false;
+    hideCzarSelectionContainer();
+
     // TODO improve render
     alert(`Winner selected: ${winnerPlayer}`);
+}
+
+/** Shuffles the played cards. */
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+/** Revelas the next card. */
+function showNextReveal() {
+    const revealBox = document.getElementById("czarSingleReveal");
+
+    if (revealIndex >= revealOrder.length) {
+        czarRevealing = false;
+        czarPicking = true;
+
+        // All cards have been revealed
+        revealBox.innerHTML = "<i>All cards revealed</i>";
+
+        // Show all answers and select winner
+        document.getElementById("czarSelectionContainer").style.display = "block";
+
+        // Hide step-by-step UI
+        document.getElementById("czarRevealArea").style.display = "none";
+
+        return;
+    }
+
+    const player = revealOrder[revealIndex];
+    const cards = state.playedCards[player];
+
+    revealBox.innerHTML = `
+        <div class="reveal-cards">
+            ${cards.map(c => `<div class="card">${c}</div>`).join("")}
+        </div>
+    `;
+
+    revealIndex++;
+}
+
+/** Hides the czar selection container. */
+function hideCzarSelectionContainer() {
+    document.getElementById("czarSelectionContainer").style.display = "none";
 }
 
 /** CZAR ACTION: draw black card */
@@ -290,6 +378,19 @@ submitBtn.onclick = async () => {
     } else {
         alert(drawCardsData.errorMessage)
     }
+};
+
+/** Show cards function on "Show Cards". */
+document.getElementById("showCardsBtn").onclick = () => {
+    czarRevealing = true;
+    showNextReveal();
+    document.getElementById("showCardsBtn").style.display = "none";
+    document.getElementById("nextCardBtn").style.display = "block";
+};
+
+/** Show cards function on "Next". */
+document.getElementById("nextCardBtn").onclick = () => {
+    showNextReveal();
 };
 
 // POLLING
