@@ -120,8 +120,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
     {
         // Count how many players must play (all except the czar)
         var playersThatMustPlay = gameState.Players
-            .Where(players => players != gameState.Czar)
-            .Count();
+            .Count(players => players != gameState.Czar);
 
         // Count how many have already played
         var playersThatPlayed = gameState.PlayedCards.Count;
