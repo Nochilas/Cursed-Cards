@@ -15,6 +15,7 @@ let hand = [];
 const blackCardDiv = document.getElementById("blackCard");
 const handContainer = document.getElementById("handContainer");
 const playerHandContainer = document.getElementById("playerCards");
+const selectedCardsContainer = document.getElementById("selectedCards");
 const selectedList = document.getElementById("selectedList");
 const submitBtn = document.getElementById("submitCardsBtn");
 const drawBlackBtn = document.getElementById("drawBlackBtn");
@@ -66,8 +67,10 @@ async function loadState() {
             hand = [];
             handContainer.innerHTML = "";
             playerHandContainer.style.display = 'none';
+            selectedCardsContainer.style.display = 'none';
         } else {
             playerHandContainer.style.display = 'block';
+            selectedCardsContainer.style.display = 'block';
         }
     }
 
