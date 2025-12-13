@@ -14,6 +14,7 @@ let hand = [];
 // UI refs
 const blackCardDiv = document.getElementById("blackCard");
 const handContainer = document.getElementById("handContainer");
+const playerHandContainer = document.getElementById("playerCards");
 const selectedList = document.getElementById("selectedList");
 const submitBtn = document.getElementById("submitCardsBtn");
 const drawBlackBtn = document.getElementById("drawBlackBtn");
@@ -64,6 +65,9 @@ async function loadState() {
         if (apiResponse.czar === playerName) {
             hand = [];
             handContainer.innerHTML = "";
+            playerHandContainer.style.display = 'none';
+        } else {
+            playerHandContainer.style.display = 'block';
         }
     }
 
