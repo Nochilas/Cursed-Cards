@@ -4,6 +4,7 @@ let revealOrder = [];
 let state = {};
 let czarRevealing = false;
 let czarPicking = false;
+let shuffledPlayedCards = null;
 
 let currentBlackCard = "";
 let blanksRequired = 1;
@@ -235,9 +236,13 @@ function renderWinnerSelection(apiResponse) {
     // Show all answers for czar
     title.style.display = "block";
 
-    const playedCards = apiResponse.playedCards ?? {};
+    // Shuffle the played cards
+    if (!shuffledPlayedCards) {
+        shuffledPlayedCards = Object.entries(apiResponse.playedCards ?? []);
+        shuffle(shuffledPlayedCards);
+    }
 
-    Object.entries(playedCards).forEach(([player, cards]) => {
+    shuffledPlayedCards.forEach(([player, cards]) => {
         const btn = document.createElement("button");
         btn.className = "czar-choice-btn";
         btn.textContent = `${cards.join(" | ")}`;
