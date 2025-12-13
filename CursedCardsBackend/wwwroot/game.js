@@ -38,6 +38,9 @@ async function loadState() {
     const apiResponse = data.response;
     state = apiResponse;
 
+    // Scoreboard
+    renderScoreboard(apiResponse.scores);
+
     // Czar info
     czarInfo.textContent = `Czar: ${apiResponse.czar}`;
 
@@ -310,6 +313,19 @@ function hideCzarSelectionContainer() {
     document.getElementById("czarSelectionContainer").style.display = "none";
 }
 
+/** Renders the scoreboard. */
+function renderScoreboard(scores) {
+    const scoreList = document.getElementById("scoreList");
+    scoreList.innerHTML = "";
+
+    Object.entries(scores ?? {}).forEach(([player, score]) => {
+        const li = document.createElement("li");
+        li.textContent = `${player}: ${score}`;
+        scoreList.appendChild(li);
+    });
+}
+
+
 /** CZAR ACTION: draw black card */
 drawBlackBtn.onclick = async () => {
     const res = await fetch(`/draw-black/${roomId}`, { method: "POST" });
@@ -356,7 +372,6 @@ submitBtn.onclick = async () => {
     const data = await playCardsResponse.json();
 
     if (playCardsResponse.ok) {
-        console.log("Cards sent successfully");
         disableButton(submitBtn);
     } else {
         alert(data.errorMessage);
@@ -371,9 +386,7 @@ submitBtn.onclick = async () => {
     });
 
     const drawCardsData = await drawCardsResult.json();
-    if (drawCardsResult.ok) {
-        console.log("New cards drawn successfully");
-    } else {
+    if (!drawCardsResult.ok) {
         alert(drawCardsData.errorMessage)
     }
 };

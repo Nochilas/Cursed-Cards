@@ -53,6 +53,9 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
             gameState.Hands[playerName] = drawnCards;
         }
 
+        // Initialize score at zero for this player
+        gameState.Scores.TryAdd(playerName, 0);
+
         // If czar is not set, choose a random player
         if (string.IsNullOrEmpty(gameState.Czar)
             && gameState.Players.Count >= _minPlayers)
