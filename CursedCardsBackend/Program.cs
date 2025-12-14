@@ -1,7 +1,5 @@
 using System.Text.Json;
-using CursedCardsBackend.Enums;
 using CursedCardsBackend.Managers;
-using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 using CursedCardsBackend.Endpoints;
 
@@ -19,8 +17,8 @@ builder.Services
 var app = builder.Build();
 
 // Serve static files
-app.UseDefaultFiles(); // index.html
-app.UseStaticFiles(); // wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.ConfigureEndpoints();
 
 // Starts the app
