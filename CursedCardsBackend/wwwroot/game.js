@@ -313,7 +313,7 @@ function showNextReveal() {
 
     revealBox.innerHTML = `
         <div class="reveal-cards">
-            ${cards.map(c => `<div class="card">${c}</div>`).join("")}
+            ${cards.map(c => `<div class="revealed-card">${c}</div>`).join("")}
         </div>
     `;
 
