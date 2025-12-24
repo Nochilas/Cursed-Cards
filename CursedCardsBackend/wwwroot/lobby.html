@@ -4,35 +4,37 @@
 <head>
     <meta charset="UTF-8" />
     <title>Cursed Cards – Lobby</title>
+
+    <!-- Alpine -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <link rel="stylesheet" href="lobby.css" />
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" x-data="lobby()" x-init="init()">
         <h1 class="title">Lobby</h1>
 
-        <div id="roomInfo" class="room-info"></div>
+        <div class="room-info" x-text="`Room: ${roomId}`"></div>
 
         <div class="players-section">
             <h2>Players</h2>
-            <ul id="playersList" class="players-list"></ul>
+            <ul class="players-list">
+                <template x-for="p in players" :key="p">
+                    <li x-text="p"></li>
+                </template>
+            </ul>
         </div>
 
         <div class="czar-section">
-            <p id="czarLabel" class="czar-label">Czar: —</p>
+            <p class="czar-label" x-text="czar ? `Czar: ${czar}` : 'Czar: —'"></p>
         </div>
 
-        <button id="startBtn" class="start-btn" onclick="startGame()">Start Game</button>
+        <!-- Start game: only czar -->
+        <button class="start-btn" x-show="isCzar" @click="startGame">
+            Start Game
+        </button>
     </div>
-
-    <script>
-        // Get roomId and playerName from query string
-        const qs = new URLSearchParams(window.location.search);
-        window.roomId = qs.get("roomId");
-        window.playerName = qs.get("playerName");
-
-        document.getElementById("roomInfo").textContent = `Room: ${window.roomId}`;
-    </script>
 
     <script src="lobby.js"></script>
 </body>

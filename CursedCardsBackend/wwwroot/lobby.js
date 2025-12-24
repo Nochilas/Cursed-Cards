@@ -1,73 +1,80 @@
-// Polling every 2 seconds
-setInterval(refreshLobby, 2000);
+function lobby() {
+    return {
+        roomId: "",
+        playerName: "",
 
-// First loading is immediate
-refreshLobby();
+        players: [],
+        czar: null,
+        gameStarted: false,
 
-/** Refresh the lobby */
-async function refreshLobby() {
-    const res = await fetch(`/lobby-state/${roomId}`);
-    const data = await res.json();
+        /** Inits the lobby. */
+        init() {
+            const params = new URLSearchParams(window.location.search);
+            this.roomId = params.get("roomId");
+            this.playerName = params.get("playerName");
 
-    if (!res.ok) {
-        const errorData = await res.json();
-        resultDiv.textContent = errorData.errorMessage ?? "Unknown error polling lobby";
-        return;
-    }
+            // First loading is immediate
+            this.refresh();
 
-    const apiResponse = data.response;
+            // Polling every 2 seconds
+            setInterval(() => this.refresh(), 2000);
+        },
 
-    // Show players
-    updatePlayersList(apiResponse.players);
+        get isCzar() {
+            return this.czar === this.playerName;
+        },
 
-    // Show button (only for czar)
-    if (apiResponse.czar) {
-        updateCzarUI(apiResponse.czar);
-    }
+        /** Refresh UI. */
+        async refresh() {
+            try {
+                // Load state
+                const res = await fetch(`/lobby-state/${this.roomId}`);
+                const data = await res.json();
 
-    // If the czar started the game, redirect to game page
-    if (apiResponse.gameStarted) {
-        redirectToGame();
-    }
-}
+                if (!res.ok) {
+                    console.error(data.errorMessage ?? "Lobby polling error");
+                    return;
+                }
 
-/** Update the displayed list of the players. */
-function updatePlayersList(players) {
-    const playersList = document.getElementById("playersList");
-    playersList.innerHTML = "";
+                // Show players
+                const state = data.response;
 
-    players.forEach(player => {
-        const listItem = document.createElement("li");
-        listItem.textContent = player;
-        playersList.appendChild(listItem);
-    });
-}
+                this.players = state.players ?? [];
+                this.czar = state.czar ?? null;
+                this.gameStarted = state.gameStarted ?? false;
 
-/** Updates the UI for the player chosen as czar. */
-function updateCzarUI(czar) {
-    document.getElementById("czarLabel").textContent = `Czar: ${czar}`;
+                if (this.gameStarted) {
+                    this.redirectToGame();
+                }
 
-    const startBtn = document.getElementById("startBtn");
-    if (czar === playerName) {
-        startBtn.style.display = "block";
-        startBtn.style.color = "green";
-    } else {
-        startBtn.style.display = "none";
-    }
-}
+            } catch (err) {
+                console.error("Error refreshing lobby", err);
+            }
+        },
 
-/** Starts the game, changing the state. */
-async function startGame() {
-    const res = await fetch(`/start-game/${roomId}/${playerName}`, { method: "POST" });
-    const data = await res.json();
+        /** Starts the game. */
+        async startGame() {
+            try {
+                const res = await fetch(
+                    `/start-game/${this.roomId}/${this.playerName}`,
+                    { method: "POST" }
+                );
 
-    if (!res.ok) {
-        alert(data.errorMessage);
-        return;
-    }
-}
+                const data = await res.json();
 
-/** Once the game starts, redirect to the game page. */
-function redirectToGame() {
-    window.location.href = `/game.html?roomId=${roomId}&playerName=${playerName}`;
+                if (!res.ok) {
+                    alert(data.errorMessage);
+                }
+
+            } catch (err) {
+                console.error("Error starting game", err);
+            }
+        },
+
+        /** Redirect players to game. */
+        redirectToGame() {
+            window.location.href =
+                `/game.html?roomId=${this.roomId}&playerName=${this.playerName}`;
+        }
+    };
 }
