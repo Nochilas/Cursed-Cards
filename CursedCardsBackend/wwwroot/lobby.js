@@ -4,7 +4,7 @@ function lobby() {
         playerName: "",
 
         players: [],
-        czar: null,
+        czar: "",
         gameStarted: false,
 
         /** Inits the lobby. */
@@ -40,7 +40,7 @@ function lobby() {
                 const state = data.response;
 
                 this.players = state.players ?? [];
-                this.czar = state.czar ?? null;
+                this.czar = state.czar ?? "";
                 this.gameStarted = state.gameStarted ?? false;
 
                 if (this.gameStarted) {
