@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <title>Cursed Cards</title>
+
+    <!-- Alpine -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div class="container" x-data="createGame()">
+        <h1 class="title">Cursed Cards</h1>
 
-<div class="container">
-    <h1 class="title">Cursed Cards</h1>
-    <button id="createGameBtn" class="btn">Create Game</button>
-    <div id="result" class="result"></div>
-</div>
+        <button class="btn" @click="create" :disabled="loading">
+            <span x-show="!loading">Create Game</span>
+            <span x-show="loading">Creating...</span>
+        </button>
 
-<script src="app.js"></script>
+        <!-- Result area -->
+        <div class="result" x-show="error" x-text="error"></div>
+
+        <!-- Invite link -->
+        <div class="result" x-show="inviteLink">
+            <div class="invite-link-box">
+                <input type="text" :value="inviteLink" readonly>
+                <button @click="copy" title="Copy link">
+                    <span x-text="copied ? '✅' : '📋'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
+
 </html>

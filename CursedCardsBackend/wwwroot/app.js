@@ -1,43 +1,46 @@
-document.getElementById("createGameBtn").addEventListener("click", async () => {
-    const resultDiv = document.getElementById("result");
-    resultDiv.textContent = "Creating game...";
+function createGame() {
+    return {
+        loading: false,
+        error: "",
+        inviteLink: "",
+        copied: false,
 
-    try {
-        const res = await fetch("/create-game", {
-            method: "POST"
-        });
+        async create() {
+            this.error = "";
+            this.inviteLink = "";
+            this.loading = true;
 
-        // Check for errors
-        if (!res.ok) {
-            const errorData = await res.json();
-            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
-            return;
-        }
-
-        const data = await res.json();
-
-        const inviteLink = `${window.location.origin}/join.html?roomId=${data.response}`;
-        resultDiv.innerHTML = `
-            <div class="invite-link-box">
-                <input type="text" id="inviteLinkInput" value="${inviteLink}" readonly />
-                <button id="copyInviteBtn" title="Copy link">📋</button>
-            </div>
-        `;
-
-        document.getElementById("copyInviteBtn").onclick = async () => {
             try {
-                await navigator.clipboard.writeText(inviteLink);
-                document.getElementById("copyInviteBtn").textContent = "✅";
-                setTimeout(() => {
-                    document.getElementById("copyInviteBtn").textContent = "📋";
-                }, 1200);
+                const res = await fetch("/create-game", {
+                    method: "POST"
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    this.error = data.errorMessage ?? "Unknown error";
+                    return;
+                }
+
+                this.inviteLink =
+                    `${window.location.origin}/join.html?roomId=${data.response}`;
+
+            } catch (err) {
+                this.error = "An error occurred while creating the game.";
+                console.error(err);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async copy() {
+            try {
+                await navigator.clipboard.writeText(this.inviteLink);
+                this.copied = true;
+                setTimeout(() => this.copied = false, 1200);
             } catch {
                 alert("Copy failed");
             }
-        };
-
-    } catch (err) {
-        resultDiv.textContent = "An error occurred while creating the game.";
-        console.error(err);
-    }
-});
+        }
+    };
+}
