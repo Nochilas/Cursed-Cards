@@ -4,59 +4,101 @@
 <head>
     <meta charset="UTF-8">
     <title>Cursed Cards – Game</title>
+
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="game.css">
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" x-data="game()" x-init="init()">
         <h1 class="title">Cursed Cards – Round</h1>
-        <div id="roomInfo" class="room-info"></div>
-        <div id="czarInfo" class="czar-info"></div>
+
+        <div class="room-info" x-text="`Stanza: ${roomId}`"></div>
+        <div class="czar-info" x-text="`Czar: ${czar ?? '—'}`"></div>
 
         <!-- Black Card -->
-        <div id="blackCard" class="black-card">No black card</div>
+        <div class="black-card" x-text="blackCard || 'No black card'"></div>
 
-        <!-- Buttons visible ONLY to the czar -->
-        <button id="drawBlackBtn" class="czar-btn">Draw black card</button>
-        <button id="startRoundBtn" class="czar-btn">Start round</button>
+        <!-- Czar controls -->
+        <template x-if="isCzar">
+            <div>
+                <button class="czar-btn" @click="drawBlack" :disabled="!!blackCard || roundStatus !== 0">
+                    Draw black card
+                </button>
 
-        <!-- Player Hand -->
-        <div id="playerCards">
-            <h2>Your cards</h2>
-            <div id="handContainer" class="hand"></div>
-        </div>
+                <button class="czar-btn" @click="startRound" :disabled="!blackCard || roundStatus !== 0">
+                    Start round
+                </button>
+            </div>
+        </template>
+
+        <!-- Player hand -->
+        <template x-if="!isCzar">
+            <div>
+                <h2>Your cards</h2>
+                <div class="hand">
+                    <template x-for="card in hand" :key="card">
+                        <div class="card" :class="{ selected: selectedCards.includes(card) }" @click="toggleCard(card)"
+                            x-text="card">
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
 
         <!-- Selected cards -->
-        <div id="selectedCards">
-            <h3>Selected cards</h3>
-            <ul id="selectedList"></ul>
-            <button id="submitCardsBtn" class="submit-btn">Submit</button>
-        </div>
+        <template x-if="!isCzar">
+            <div>
+                <h3>Selected cards</h3>
+                <ul>
+                    <template x-for="c in selectedCards" :key="c">
+                        <li x-text="c"></li>
+                    </template>
+                </ul>
 
-        <!-- Show cards (one by one) -->
-        <div id="czarRevealArea" style="display:none;">
-            <button id="showCardsBtn" class="czar-btn">Show Cards</button>
-            <div id="czarSingleReveal" class="reveal-card"></div>
-            <button id="nextCardBtn" class="czar-btn" style="display:none;">Next</button>
-        </div>
+                <button class="submit-btn" x-show="selectedCards.length === blanksRequired" @click="submitCards">
+                    Submit
+                </button>
+            </div>
+        </template>
 
-        <!-- Czar selection -->
-        <h3 id="czarSelectionTitle" style="display:none;">Select the winning answer</h3>
-        <div id="czarSelectionContainer" class="czar-selection"></div>
+        <!-- Czar reveal -->
+        <template x-if="czarRevealing">
+            <div>
+                <button class="czar-btn" @click="revealNext">Next</button>
+
+                <div class="reveal-card">
+                    <template x-for="c in currentReveal" :key="c">
+                        <div class="revealed-card" x-text="c"></div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- Czar pick winner -->
+        <template x-if="czarPicking">
+            <div>
+                <h3>Select the winning answer</h3>
+
+                <template x-for="[player, cards] in shuffledPlayedCards" :key="player">
+                    <button class="czar-choice-btn" @click="selectWinner(player)" x-text="cards.join(' | ')">
+                    </button>
+                </template>
+            </div>
+        </template>
 
         <!-- Scoreboard -->
-        <div id="scoreboard" class="scoreboard">
+        <div class="scoreboard">
             <h3>Scores</h3>
-            <ul id="scoreList"></ul>
+            <ul>
+                <template x-for="(score, player) in scores" :key="player">
+                    <li x-text="`${player}: ${score}`"></li>
+                </template>
+            </ul>
         </div>
+
     </div>
 
-    <script>
-        window.roomId = new URLSearchParams(window.location.search).get("roomId");
-        window.playerName = new URLSearchParams(window.location.search).get("playerName");
-
-        document.getElementById("roomInfo").textContent = `Stanza: ${roomId}`;
-    </script>
     <script src="game.js"></script>
 </body>
 
