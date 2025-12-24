@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <title>Join Game - Cursed Cards</title>
+
+    <!-- Alpine -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div class="container" x-data="joinGame()" x-init="init()">
+        <h1 class="title">Join Game</h1>
 
-<div class="container">
-    <h1 class="title">Join Game</h1>
+        <div class="subtitle" x-text="roomText"></div>
 
-    <div id="roomInfo" class="subtitle"></div>
+        <input class="input" type="text" placeholder="Enter your username" x-model="playerName"
+            :disabled="loading || joined">
 
-    <input id="usernameInput" class="input" type="text" placeholder="Enter your username">
+        <button class="btn" @click="join" :disabled="loading || joined">
+            <span x-show="!loading">Join</span>
+            <span x-show="loading">Connecting...</span>
+        </button>
 
-    <button id="joinBtn" class="btn">Join</button>
+        <div class="result" x-show="error" x-text="error"></div>
+    </div>
 
-    <div id="result" class="result"></div>
-</div>
-
-<script src="join.js"></script>
+    <script src="join.js"></script>
 </body>
+
 </html>

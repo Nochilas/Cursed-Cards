@@ -1,52 +1,65 @@
-// Reads roomId from url, es: ?roomId=ABC123
-const params = new URLSearchParams(window.location.search);
-const roomId = params.get("roomId");
+function joinGame() {
+    return {
+        roomId: "",
+        playerName: "",
+        loading: false,
+        joined: false,
+        error: "",
 
-const roomInfo = document.getElementById("roomInfo");
-roomInfo.textContent = roomId
-    ? `Room Code: ${roomId}`
-    : "Error: no room specified.";
+        init() {
+            const params = new URLSearchParams(window.location.search);
+            this.roomId = params.get("roomId");
 
-document.getElementById("joinBtn").addEventListener("click", async () => {
-    const resultDiv = document.getElementById("result");
-    const playerName = document.getElementById("usernameInput").value.trim();
+            if (!this.roomId) {
+                this.error = "Missing or invalid RoomId";
+            }
+        },
 
-    if (!playerName) {
-        resultDiv.textContent = "Username is required";
-        return;
-    }
+        get roomText() {
+            return this.roomId
+                ? `Room Code: ${this.roomId}`
+                : "Error: no room specified.";
+        },
 
-    if (!roomId) {
-        resultDiv.textContent = "Missing or invalid RoomId";
-        return;
-    }
+        async join() {
+            if (!this.playerName.trim()) {
+                this.error = "Username is required";
+                return;
+            }
 
-    resultDiv.textContent = "Connecting...";
+            if (!this.roomId) {
+                this.error = "Missing or invalid RoomId";
+                return;
+            }
 
-    try {
-        // The player joins the game
-        const joinGameResult = await fetch(`/join-game/${roomId}/${playerName}`, {
-            method: "POST"
-        });
+            this.error = "";
+            this.loading = true;
 
-        // Check for errors
-        if (!joinGameResult.ok) {
-            const errorData = await joinGameResult.json();
-            resultDiv.textContent = errorData.errorMessage ?? "Unknown error";
-            return;
+            try {
+                const res = await fetch(
+                    `/join-game/${this.roomId}/${this.playerName}`,
+                    { method: "POST" }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    this.error = data.errorMessage ?? "Unknown error";
+                    return;
+                }
+
+                this.joined = true;
+
+                // Redirect to lobby
+                window.location.href =
+                    `/lobby.html?roomId=${this.roomId}&playerName=${data.response}`;
+
+            } catch (err) {
+                this.error = "An error occurred while joining the game.";
+                console.error(err);
+            } finally {
+                this.loading = false;
+            }
         }
-
-        const data = await joinGameResult.json();
-        const username = data.response;
-        resultDiv.textContent = `You joined the game as ${username}!`;
-
-        // Disable the join button after the player successfully joins
-        document.getElementById("joinBtn").disabled = true;
-
-        // Redirect to lobby page
-        window.location.href = `/lobby.html?roomId=${roomId}&playerName=${username}`;
-    } catch (err) {
-        resultDiv.textContent = "An error occurred while joining the game.";
-        console.error(err);
-    }
-});
+    };
+}
