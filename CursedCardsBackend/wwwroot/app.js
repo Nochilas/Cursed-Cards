@@ -15,7 +15,9 @@ document.getElementById("createGameBtn").addEventListener("click", async () => {
         }
 
         const data = await res.json();
-        resultDiv.textContent = `Game link: http://localhost:5291/join.html?roomId=${data.response}`;
+
+        const inviteLink = `${window.location.origin}/join.html?roomId=${data.response}`;
+        resultDiv.textContent = `Game link: ${inviteLink}`;
     } catch (err) {
         resultDiv.textContent = "An error occurred while creating the game.";
         console.error(err);
