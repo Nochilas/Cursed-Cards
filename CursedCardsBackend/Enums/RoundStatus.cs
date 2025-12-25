@@ -5,5 +5,4 @@ public enum RoundStatus : byte
     Waiting = 0,
     InProgress,
     CzarPicking,
-    Finished,
 }

@@ -124,7 +124,9 @@ public class GameService(
         // Update score and game status
         gameState.Scores[winnerPlayer] = value += 1;
         gameState.Czar = winnerPlayer;
-        gameState.RoundStatus = RoundStatus.Finished;
+
+        // Reset round status to allow czar starting next round
+        gameState.RoundStatus = RoundStatus.Waiting;
 
         // Reset
         gameState.PlayedCards = [];
