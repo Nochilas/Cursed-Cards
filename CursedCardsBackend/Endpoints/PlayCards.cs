@@ -14,7 +14,7 @@ public static class PlayCards
         /// </summary>
         public void AddPlayCardsEndpoint()
         {
-            app.MapPost("/play-cards/{roomId}/{playerName}", (
+            app.MapPost("/play-cards/{roomId}/{playerName}", async (
                 string roomId,
                 string playerName,
                 SelectedCardsRequestDTO selectedCards,
@@ -69,7 +69,7 @@ public static class PlayCards
                 gameService.IsRoundComplete(gameState);
 
                 // Update
-                gameService.WriteGameState(gameState);
+                await gameService.WriteGameStateAsync(gameState);
                 return Results.Ok(new ApiSuccessResponse<string>("Cards played successfully"));
             });
         }

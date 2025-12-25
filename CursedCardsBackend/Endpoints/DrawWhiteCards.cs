@@ -12,7 +12,7 @@ public static class DrawWhiteCards
         /// </summary>
         public void AddDrawWhiteCardsEndpoint()
         {
-            app.MapPost("/draw-white/{roomId}/{player}/{quantity}", (
+            app.MapPost("/draw-white/{roomId}/{player}/{quantity}", async (
                 string roomId,
                 string player,
                 int quantity,
@@ -40,7 +40,7 @@ public static class DrawWhiteCards
                 gameState.Hands[player].AddRange(drawnCards);
 
                 // Update
-                gameService.WriteGameState(gameState);
+                await gameService.WriteGameStateAsync(gameState);
                 return Results.Ok(new ApiSuccessResponse<List<string>>(gameState.Hands[player]));
             });
         }

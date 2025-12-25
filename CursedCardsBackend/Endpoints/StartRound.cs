@@ -14,7 +14,7 @@ public static class StartRound
         /// </summary>
         public void AddStartRoundEndpoint()
         {
-            app.MapPost("/start-round/{roomId}/{player}", (
+            app.MapPost("/start-round/{roomId}/{player}", async (
                 string roomId,
                 string player,
                 GameService gameService
@@ -45,7 +45,7 @@ public static class StartRound
                 gameState.PlayedCards.Clear();
                 gameState.RoundStatus = RoundStatus.InProgress;
 
-                gameService.WriteGameState(gameState);
+                await gameService.WriteGameStateAsync(gameState);
 
                 return Results.Ok(new ApiSuccessResponse<string>("Round started"));
             });

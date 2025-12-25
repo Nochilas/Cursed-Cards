@@ -69,7 +69,7 @@ public class GameService(
         }
 
         // Update
-        WriteGameState(gameState);
+        await WriteGameStateAsync(gameState);
 
         // Notify
         await gameNotifier.LobbyUpdatedAsync(gameState);
@@ -81,7 +81,7 @@ public class GameService(
     public async Task StartGameAsync(GameState gameState)
     {
         gameState.GameStarted = true;
-        WriteGameState(gameState);
+        await WriteGameStateAsync(gameState);
 
         // Notify
         await gameNotifier.LobbyUpdatedAsync(gameState);
@@ -111,7 +111,7 @@ public class GameService(
     /// <summary>
     /// Selects the player that won the round.
     /// </summary>
-    public void SelectWinner(string roomId, string winnerPlayer, GameState gameState)
+    public async Task SelectWinnerAsync(string roomId, string winnerPlayer, GameState gameState)
     {
         // Check if the player has a score
         if (!gameState.Scores.TryGetValue(winnerPlayer, out int value))
@@ -131,7 +131,7 @@ public class GameService(
         gameState.CurrentBlackCard = null;
 
         // Update
-        WriteGameState(gameState);
+        await WriteGameStateAsync(gameState);
     }
 
     /// <summary>
@@ -163,8 +163,11 @@ public class GameService(
     /// <summary>
     /// Updates the current game state.
     /// </summary>
-    public void WriteGameState(GameState gameState)
-        => gameManager.Write(gameState);
+    public async Task WriteGameStateAsync(GameState gameState)
+    {
+        gameManager.Write(gameState);
+        await gameNotifier.GameUpdatedAsync(gameState);
+    }
 
     /// <summary>
     /// Checks if a given roomId equals the roomId of the current game.

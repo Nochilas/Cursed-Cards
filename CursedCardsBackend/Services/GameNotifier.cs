@@ -9,16 +9,18 @@ public class GameNotifier(IHubContext<GameHub> hub)
     /// <summary>
     /// Lobby notification event.
     /// </summary>
-    public Task LobbyUpdatedAsync(GameState state)
-        => hub.Clients
+    public async Task LobbyUpdatedAsync(GameState state)
+        => await hub.Clients
             .Group(state.RoomId)
             .SendAsync(
                 method: CursedCardsConstants.UPDATED_LOBBY_EVENT,
                 new LobbyDTO(state.Players, state.Czar, state.GameStarted));
-    
-    // TODO
-    // public Task GameStateUpdated(GameState state)
-    //     => hub.Clients
-    //         .Group(state.RoomId)
-    //         .SendAsync("GameStateUpdated", stateDTO);
+
+    /// <summary>
+    /// Game state changed notification event.
+    /// </summary>
+    public async Task GameUpdatedAsync(GameState state)
+        => await hub.Clients
+            .Group(state.RoomId)
+            .SendAsync(CursedCardsConstants.UPDATED_GAME_EVENT, state);
 }

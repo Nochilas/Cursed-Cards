@@ -12,7 +12,7 @@ public static class DrawBlackCard
         /// </summary>
         public void AddDrawBlackCardEndpoint()
         {
-            app.MapPost("/draw-black/{roomId}", (
+            app.MapPost("/draw-black/{roomId}", async (
                 string roomId,
                 GameService gameService) =>
             {
@@ -37,7 +37,7 @@ public static class DrawBlackCard
                         [.. gameState.BlackDeck])[0];
 
                 // Update
-                gameService.WriteGameState(gameState);
+                await gameService.WriteGameStateAsync(gameState);
                 return Results.Ok(new ApiSuccessResponse<string>(gameState.CurrentBlackCard));
             });
         }

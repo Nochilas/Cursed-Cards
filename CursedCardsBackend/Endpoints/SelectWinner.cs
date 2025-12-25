@@ -13,7 +13,7 @@ public static class SelectWinner
         /// </summary>
         public void AddSelectWinnerEndpoint()
         {
-            app.MapPost("/select-winner", (
+            app.MapPost("/select-winner", async (
                 string roomId,
                 string czarPlayerName,
                 string winnerPlayer,
@@ -39,7 +39,7 @@ public static class SelectWinner
                     return Results.NotFound(new ApiErrorResponse("Player not found"));
                 }
 
-                gameService.SelectWinner(roomId, winnerPlayer, gameState);
+                await gameService.SelectWinnerAsync(roomId, winnerPlayer, gameState);
                 return Results.Ok(new ApiSuccessResponse<string>("Winner selected"));
             });
         }
