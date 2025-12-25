@@ -69,7 +69,7 @@ public class GameService(
         }
 
         // Update
-        gameManager.Write(gameState);
+        WriteGameState(gameState);
 
         // Notify
         await gameNotifier.LobbyUpdatedAsync(gameState);
