@@ -119,7 +119,7 @@ function game() {
         revealNext() {
             this.revealIndex++;
 
-            if (this.revealIndex >= this.revealOrder.length) {
+            if (this.revealIndex > this.revealOrder.length) {
                 this.czarRevealing = false;
                 this.czarPicking = true;
 
