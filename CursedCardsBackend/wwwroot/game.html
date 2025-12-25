@@ -25,7 +25,7 @@
 
         <!-- Czar controls -->
         <div x-show="isCzar">
-            <button class="czar-btn" @click="drawBlack" :disabled="Boolean(blackCard) || roundStatus !== 0">
+            <button class="czar-btn" @click="drawBlack" :disabled="blackCard || roundStatus !== 0">
                 Draw black card
             </button>
 
