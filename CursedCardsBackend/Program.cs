@@ -1,7 +1,8 @@
-using System.Text.Json;
+using CursedCardsBackend.Constants;
+using CursedCardsBackend.Endpoints;
 using CursedCardsBackend.Managers;
 using CursedCardsBackend.Services;
-using CursedCardsBackend.Endpoints;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,8 @@ builder.Services
         WriteIndented = true
     })
     .AddSingleton<GameManager>()
-    .AddSingleton<GameService>();
+    .AddSingleton<GameService>()
+    .AddSignalR();
 
 var app = builder.Build();
 
@@ -20,6 +22,9 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.ConfigureEndpoints();
+
+// SignalR
+app.MapHub<GameHub>(CursedCardsConstants.GAME_HUB_ENDPOINT);
 
 // Starts the app
 app.Run();
