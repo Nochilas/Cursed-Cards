@@ -24,17 +24,15 @@
         <div class="black-card" x-text="blackCard || 'No black card'"></div>
 
         <!-- Czar controls -->
-        <template x-if="isCzar">
-            <div>
-                <button class="czar-btn" @click="drawBlack" :disabled="!!blackCard || roundStatus !== 0">
-                    Draw black card
-                </button>
+        <div x-show="isCzar">
+            <button class="czar-btn" @click="drawBlack" :disabled="Boolean(blackCard) || roundStatus !== 0">
+                Draw black card
+            </button>
 
-                <button class="czar-btn" @click="startRound" :disabled="!blackCard || roundStatus !== 0">
-                    Start round
-                </button>
-            </div>
-        </template>
+            <button class="czar-btn" @click="startRound" :disabled="!blackCard || roundStatus !== 0">
+                Start round
+            </button>
+        </div>
 
         <!-- Player hand -->
         <template x-if="!isCzar">
