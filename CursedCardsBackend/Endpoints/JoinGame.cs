@@ -10,7 +10,7 @@ public static class JoinGame
         /// <summary>
         /// Allows a player to join a game.
         /// </summary>
-        public async Task AddJoinGameEndpointAsync()
+        public void AddJoinGameEndpoint()
         {
             app.MapPost("/join-game/{roomId}/{playerName}", async (
                 string roomId,

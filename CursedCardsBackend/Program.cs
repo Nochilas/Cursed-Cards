@@ -22,7 +22,7 @@ var app = builder.Build();
 // Serve static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
-await app.ConfigureEndpointsAsync();
+app.ConfigureEndpoints();
 
 // SignalR
 app.MapHub<GameHub>(CursedCardsConstants.GAME_HUB_ENDPOINT);

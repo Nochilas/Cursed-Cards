@@ -7,13 +7,13 @@ public static class EndpointConfig
         /// <summary>
         /// Registers all endpoints
         /// </summary>
-        public async Task ConfigureEndpointsAsync()
+        public void ConfigureEndpoints()
         {
             // Player creates a new game
             app.AddCreateGameEndpoint();
 
             // Player joins an existing game
-            await app.AddJoinGameEndpointAsync();
+            app.AddJoinGameEndpoint();
 
             // Returns lobby state for UI refresh
             app.AddGetLobbyStateEndpoint();
