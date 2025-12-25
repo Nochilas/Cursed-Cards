@@ -51,14 +51,14 @@
         <!-- Selected cards -->
         <template x-if="!isCzar">
             <div>
-                <h3>Selected cards</h3>
+                <h3 x-show="selectedCards.length > 0">Selected cards</h3>
                 <ul>
                     <template x-for="c in selectedCards" :key="c">
                         <li x-text="c"></li>
                     </template>
                 </ul>
 
-                <button class="submit-btn" x-show="selectedCards.length === blanksRequired && canSubmit"
+                <button class="submit-btn" :disabled="selectedCards.length !== blanksRequired || !canSubmit"
                     @click="submitCards">
                     Submit
                 </button>
