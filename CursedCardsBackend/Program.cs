@@ -25,7 +25,7 @@ app.UseStaticFiles();
 app.ConfigureEndpoints();
 
 // SignalR
-app.MapHub<GameHub>(CursedCardsConstants.GAME_HUB_ENDPOINT);
+app.MapHub<GameHub>(CursedCardsEndpoints.GAME_HUB_ENDPOINT);
 
 // Starts the app
 app.Run();

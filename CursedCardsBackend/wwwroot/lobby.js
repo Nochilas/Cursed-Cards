@@ -44,10 +44,14 @@ function lobby() {
         },
 
         async startGame() {
-            await fetch(
+            const res = await fetch(
                 `/start-game/${this.roomId}/${this.playerName}`,
                 { method: "POST" }
             );
+            const data = await res.json();
+            if (data.hasError) {
+                alert(data.errorMessage);
+            }
         },
 
         redirectToGame() {

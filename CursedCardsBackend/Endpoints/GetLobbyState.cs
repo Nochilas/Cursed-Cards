@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -12,20 +13,23 @@ public static class GetLobbyState
             /// <summary>
             /// Opens the room lobby.
             /// </summary>
-            app.MapGet("/lobby-state/{roomId}", (
-                string roomId,
-                GameService gameService) =>
+            app.MapGet(
+                CursedCardsEndpoints.GET_LOBBY_STATE,
+                (string roomId, GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                {
+                    return new ApiResponse<LobbyDTO>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
+                }
 
-                var lobbyDto = new LobbyDTO(
-                    gameState.Players,
-                    gameState.Czar,
-                    gameState.GameStarted);
-
-                return Results.Ok(new ApiSuccessResponse<LobbyDTO>(lobbyDto));
+                return new ApiResponse<LobbyDTO>(
+                    Response: new(
+                        gameState.Players,
+                        gameState.Czar,
+                        gameState.GameStarted));
             });
         }
     }

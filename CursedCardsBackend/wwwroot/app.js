@@ -16,8 +16,7 @@ function createGame() {
                 });
 
                 const data = await res.json();
-
-                if (!res.ok) {
+                if (data.hasError) {
                     this.error = data.errorMessage ?? "Unknown error";
                     return;
                 }

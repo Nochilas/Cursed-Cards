@@ -13,7 +13,7 @@ public class GameNotifier(IHubContext<GameHub> hub)
         => await hub.Clients
             .Group(state.RoomId)
             .SendAsync(
-                method: CursedCardsConstants.UPDATED_LOBBY_EVENT,
+                method: Events.UPDATED_LOBBY_EVENT,
                 new LobbyDTO(state.Players, state.Czar, state.GameStarted));
 
     /// <summary>
@@ -22,5 +22,5 @@ public class GameNotifier(IHubContext<GameHub> hub)
     public async Task GameUpdatedAsync(GameState state)
         => await hub.Clients
             .Group(state.RoomId)
-            .SendAsync(CursedCardsConstants.UPDATED_GAME_EVENT, state);
+            .SendAsync(Events.UPDATED_GAME_EVENT, state);
 }

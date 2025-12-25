@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Enums;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Enums;
 using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
@@ -14,48 +15,62 @@ public static class PlayCards
         /// </summary>
         public void AddPlayCardsEndpoint()
         {
-            app.MapPost("/play-cards/{roomId}/{playerName}", async (
-                string roomId,
-                string playerName,
-                SelectedCardsRequestDTO selectedCards,
-                GameService gameService) =>
+            app.MapPost(
+                CursedCardsEndpoints.PLAY_CARDS,
+                async (
+                    string roomId,
+                    string playerName,
+                    SelectedCardsRequestDTO selectedCards,
+                    GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
 
                 // Room check
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
                 // Status check: the round must be in progress
                 if (gameState.RoundStatus != RoundStatus.InProgress)
                 {
-                    return Results.BadRequest(new ApiErrorResponse("No active round"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.NO_ACTIVE_ROUND);
                 }
 
                 // Player check: must be an existing player
                 if (!gameState.Players.Contains(playerName))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Player not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.PLAYER_NOT_FOUND);
                 }
 
                 // Czar check: the czar can't play cards
                 if (string.Equals(gameState.Czar, playerName))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Czar cannot play cards"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.CZAR_CANNOT_PLAY_CARDS);
                 }
 
                 // Check if player has played cards already
                 if (gameState.PlayedCards.ContainsKey(playerName))
                 {
-                    return Results.BadRequest(new ApiErrorResponse("Player already played this round"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.PLAYER_ALREADY_PLAYED);
                 }
 
                 // Check if black card is selected
                 if (string.IsNullOrEmpty(gameState.CurrentBlackCard))
                 {
-                    return Results.BadRequest(new { errorMessage = "No black card selected" });
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.NO_BLACK_CARD_SELECTED);
                 }
 
                 // Update the played cards
@@ -70,7 +85,7 @@ public static class PlayCards
 
                 // Update
                 await gameService.WriteGameStateAsync(gameState);
-                return Results.Ok(new ApiSuccessResponse<string>("Cards played successfully"));
+                return new ApiResponse<string>(Response: SuccessMessages.CARDS_PLAYED_SUCCESSFULLY);
             });
         }
     }

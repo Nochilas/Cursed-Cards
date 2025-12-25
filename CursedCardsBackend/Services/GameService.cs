@@ -111,7 +111,7 @@ public class GameService(
     /// <summary>
     /// Selects the player that won the round.
     /// </summary>
-    public async Task SelectWinnerAsync(string roomId, string winnerPlayer, GameState gameState)
+    public async Task SelectWinnerAsync(string winnerPlayer, GameState gameState)
     {
         // Check if the player has a score
         if (!gameState.Scores.TryGetValue(winnerPlayer, out int value))

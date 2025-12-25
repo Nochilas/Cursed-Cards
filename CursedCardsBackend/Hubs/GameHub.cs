@@ -18,12 +18,12 @@ public class GameHub(GameService gameService) : Hub
         // Immediately send status to joined client
         await Clients.Caller
             .SendAsync(
-                method: CursedCardsConstants.UPDATED_LOBBY_EVENT,
+                method: Events.UPDATED_LOBBY_EVENT,
                 new LobbyDTO(gameState.Players, gameState.Czar, gameState.GameStarted));
 
         await Clients.Caller
             .SendAsync(
-                method: CursedCardsConstants.UPDATED_GAME_EVENT,
+                method: Events.UPDATED_GAME_EVENT,
                 gameState);
     }
 

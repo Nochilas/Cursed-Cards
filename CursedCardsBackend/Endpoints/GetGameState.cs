@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -12,17 +13,19 @@ public static class GetGameState
         /// </summary>
         public void AddGetGameStateEndpoint()
         {
-            app.MapGet("/game-state/{roomId}", (
-                string roomId,
-                GameService gameService) =>
+            app.MapGet(
+                CursedCardsEndpoints.GET_GAME_STATE,
+                (string roomId, GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<GameState>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
-                return Results.Ok(new ApiSuccessResponse<GameState>(gameState));
+                return new ApiResponse<GameState>(Response: gameState);
             });
         }
     }

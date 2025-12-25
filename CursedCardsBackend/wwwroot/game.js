@@ -82,8 +82,9 @@ function game() {
                 body: JSON.stringify({ selectedCards: this.selectedCards })
             });
 
-            if (!res.ok) {
-                alert("An error occurred while submitting cards");
+            const data = await res.json();
+            if (data.hasError) {
+                alert(data.errorMessage);
                 this.canSubmit = true;
                 return;
             }
@@ -98,13 +99,18 @@ function game() {
         async drawBlack() {
             const res = await fetch(`/draw-black/${this.roomId}`, { method: "POST" });
             const data = await res.json();
-            if (res.ok) this.blackCard = data.response;
+            if (!data.hasError) this.blackCard = data.response;
+            else alert(data.errorMessage)
         },
 
         async startRound() {
-            await fetch(`/start-round/${this.roomId}/${this.playerName}`, {
+            const res = await fetch(`/start-round/${this.roomId}/${this.playerName}`, {
                 method: "POST"
             });
+            const data = await res.json();
+            if (data.hasError) {
+                alert(data.errorMessage);
+            }
         },
 
         prepareReveal() {
@@ -130,11 +136,16 @@ function game() {
         },
 
         async selectWinner(player) {
-            await fetch(
+            const res = await fetch(
                 `/select-winner?roomId=${this.roomId}&czarPlayerName=${this.playerName}&winnerPlayer=${player}`,
                 { method: "POST" }
             );
-            this.resetCzarFlow();
+            const data = await res.json();
+            if (data.hasError) {
+                alert(data.errorMessage)
+            } else {
+                this.resetCzarFlow();
+            }
         },
 
         shuffle(arr) {

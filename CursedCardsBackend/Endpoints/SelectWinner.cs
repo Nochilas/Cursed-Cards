@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -13,34 +14,42 @@ public static class SelectWinner
         /// </summary>
         public void AddSelectWinnerEndpoint()
         {
-            app.MapPost("/select-winner", async (
-                string roomId,
-                string czarPlayerName,
-                string winnerPlayer,
-                GameService gameService) =>
+            app.MapPost(
+                CursedCardsEndpoints.SELECT_WINNER,
+                async (
+                    string roomId,
+                    string czarPlayerName,
+                    string winnerPlayer,
+                    GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
 
                 // Room check
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
                 // Czar check: the caller must be the czar
                 if (!string.Equals(gameState.Czar, czarPlayerName))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Only the czar can select the winner"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ONLY_CZAR_SELECTS_WINNER);
                 }
 
                 // Player check: must be an existing player
                 if (!gameState.Players.Contains(winnerPlayer))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Player not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.PLAYER_NOT_FOUND);
                 }
 
-                await gameService.SelectWinnerAsync(roomId, winnerPlayer, gameState);
-                return Results.Ok(new ApiSuccessResponse<string>("Winner selected"));
+                await gameService.SelectWinnerAsync(winnerPlayer, gameState);
+                return new ApiResponse<string>(Response: SuccessMessages.WINNER_SELECTED);
             });
         }
     }

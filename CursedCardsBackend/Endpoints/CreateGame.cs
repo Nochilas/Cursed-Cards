@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -9,10 +10,12 @@ public static class CreateGame
     {
         public void AddCreateGameEndpoint()
         {
-            app.MapPost("/create-game", (GameService gameService) =>
+            app.MapPost(
+                CursedCardsEndpoints.CREATE_GAME,
+                (GameService gameService) =>
             {
                 var roomId = gameService.InitializeGame();
-                return Results.Ok(new ApiSuccessResponse<string>(roomId));
+                return new ApiResponse<string>(Response: roomId);
             });
         }
     }

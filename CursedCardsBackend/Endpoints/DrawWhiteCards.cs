@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -12,24 +13,30 @@ public static class DrawWhiteCards
         /// </summary>
         public void AddDrawWhiteCardsEndpoint()
         {
-            app.MapPost("/draw-white/{roomId}/{player}/{quantity}", async (
-                string roomId,
-                string player,
-                int quantity,
-                GameService gameService) =>
+            app.MapPost(
+                CursedCardsEndpoints.DRAW_WHITE_CARD,
+                async (
+                    string roomId,
+                    string player,
+                    int quantity,
+                    GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
 
                 // Check if room is correct
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<List<string>>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
                 // Check remaining white cards
                 if (gameService.NoCardsLeft(gameState.WhiteDeck.Count, quantity))
                 {
-                    return Results.BadRequest(new ApiErrorResponse("No more white cards"));
+                    return new ApiResponse<List<string>>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.NO_MORE_WHITE_CARDS);
                 }
 
                 // Draw
@@ -41,7 +48,7 @@ public static class DrawWhiteCards
 
                 // Update
                 await gameService.WriteGameStateAsync(gameState);
-                return Results.Ok(new ApiSuccessResponse<List<string>>(gameState.Hands[player]));
+                return new ApiResponse<List<string>>(Response: gameState.Hands[player]);
             });
         }
     }

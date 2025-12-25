@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Models;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
 namespace CursedCardsBackend.Endpoints;
@@ -12,22 +13,26 @@ public static class DrawBlackCard
         /// </summary>
         public void AddDrawBlackCardEndpoint()
         {
-            app.MapPost("/draw-black/{roomId}", async (
-                string roomId,
-                GameService gameService) =>
+            app.MapPost(
+                CursedCardsEndpoints.DRAW_BLACK_CARD,
+                async (string roomId, GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
 
                 // Check if room is correct
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
                 // Check remaining black cards
                 if (gameService.NoCardsLeft(gameState.BlackDeck.Count, 1))
                 {
-                    return Results.BadRequest(new ApiErrorResponse("No more black cards"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.NO_MORE_BLACK_CARDS);
                 }
 
                 // Draw
@@ -38,7 +43,7 @@ public static class DrawBlackCard
 
                 // Update
                 await gameService.WriteGameStateAsync(gameState);
-                return Results.Ok(new ApiSuccessResponse<string>(gameState.CurrentBlackCard));
+                return new ApiResponse<string>(Response: gameState.CurrentBlackCard);
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using CursedCardsBackend.Enums;
+﻿using CursedCardsBackend.Constants;
+using CursedCardsBackend.Enums;
 using CursedCardsBackend.Models;
 using CursedCardsBackend.Services;
 
@@ -14,31 +15,40 @@ public static class StartRound
         /// </summary>
         public void AddStartRoundEndpoint()
         {
-            app.MapPost("/start-round/{roomId}/{player}", async (
-                string roomId,
-                string player,
-                GameService gameService
-            ) =>
+            app.MapPost(
+                CursedCardsEndpoints.START_ROUND,
+                async (
+                    string roomId,
+                    string player,
+                    GameService gameService) =>
             {
                 var gameState = gameService.ReadGameState();
                 if (!gameService.CheckRoomId(roomId, gameState.RoomId))
                 {
-                    return Results.NotFound(new ApiErrorResponse("Room not found"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROOM_NOT_FOUND);
                 }
 
                 if (!string.Equals(gameState.Czar, player))
                 {
-                    return Results.BadRequest(new ApiErrorResponse("You are not the Czar"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.YOU_ARE_NOT_CZAR);
                 }
 
                 if (string.IsNullOrWhiteSpace(gameState.CurrentBlackCard))
                 {
-                    return Results.BadRequest(new ApiErrorResponse("No black card drawn"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.NO_BLACK_CARD_SELECTED);
                 }
 
                 if (gameState.RoundStatus == RoundStatus.InProgress)
                 {
-                    return Results.BadRequest(new ApiErrorResponse("Round already in progress"));
+                    return new ApiResponse<string>(
+                        HasError: true,
+                        ErrorMessage: ErrorMessages.ROUND_IN_PROGRESS);
                 }
 
                 // Reset previous round data
@@ -47,7 +57,7 @@ public static class StartRound
 
                 await gameService.WriteGameStateAsync(gameState);
 
-                return Results.Ok(new ApiSuccessResponse<string>("Round started"));
+                return new ApiResponse<string>(Response: SuccessMessages.ROUND_STARTED);
             });
         }
     }
