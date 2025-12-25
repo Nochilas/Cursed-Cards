@@ -3,7 +3,7 @@ function game() {
         roomId: "",
         playerName: "",
 
-        // game state
+        // Game state
         czar: null,
         roundStatus: 0,
         blackCard: "",
@@ -11,12 +11,13 @@ function game() {
         hands: {},
         playedCards: {},
 
-        // player state
+        // Player state
         hand: [],
         selectedCards: [],
         blanksRequired: 1,
+        canSubmit: true,
 
-        // czar flow
+        // Czar flow
         isCzar: false,
         czarRevealing: false,
         czarPicking: false,
@@ -33,7 +34,7 @@ function game() {
                 .withUrl("/gamehub")
                 .withAutomaticReconnect()
                 .build();
-            
+
             this.connection.on("GameUpdated", state => {
                 this.applyState(state);
             });
@@ -72,18 +73,26 @@ function game() {
         },
 
         async submitCards() {
-            await fetch(`/play-cards/${this.roomId}/${this.playerName}`, {
+            // Disable button to avoid multiple submits
+            this.canSubmit = false;
+
+            const res = await fetch(`/play-cards/${this.roomId}/${this.playerName}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ selectedCards: this.selectedCards })
             });
 
+            if (!res.ok) {
+                alert("An error occurred while submitting cards");
+                this.canSubmit = true;
+                return;
+            }
+
+            // Draw white
             await fetch(
                 `/draw-white/${this.roomId}/${this.playerName}/${this.blanksRequired}`,
                 { method: "POST" }
             );
-
-            this.selectedCards = [];
         },
 
         async drawBlack() {
@@ -157,10 +166,11 @@ function game() {
             // Reset czar flow if round changed
             if (this.roundStatus !== 2) {
                 this.resetCzarFlow();
+                return;
             }
 
             // Prepare reveal
-            if (this.isCzar && this.roundStatus === 2 && !this.czarPicking) {
+            if (this.isCzar && !this.czarPicking) {
                 this.prepareReveal();
             }
         }

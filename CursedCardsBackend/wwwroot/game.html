@@ -58,7 +58,8 @@
                     </template>
                 </ul>
 
-                <button class="submit-btn" x-show="selectedCards.length === blanksRequired" @click="submitCards">
+                <button class="submit-btn" x-show="selectedCards.length === blanksRequired && canSubmit"
+                    @click="submitCards">
                     Submit
                 </button>
             </div>
