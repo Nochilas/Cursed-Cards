@@ -33,7 +33,7 @@ function game() {
                 .withUrl("/gamehub")
                 .withAutomaticReconnect()
                 .build();
-
+            
             this.connection.on("GameUpdated", state => {
                 this.applyState(state);
             });
@@ -41,7 +41,6 @@ function game() {
             this.connection.onreconnected(async () => {
                 await this.connection.invoke("JoinRoom", this.roomId);
             });
-
 
             await this.connection.start();
             await this.connection.invoke("JoinRoom", this.roomId);
@@ -148,19 +147,19 @@ function game() {
 
             this.isCzar = this.czar === this.playerName;
 
-            // player hand
+            // Player hand
             if (this.czar !== this.playerName) {
                 this.hand = state.hands?.[this.playerName] ?? [];
             } else {
                 this.hand = [];
             }
 
-            // reset czar flow if round changed
+            // Reset czar flow if round changed
             if (this.roundStatus !== 2) {
                 this.resetCzarFlow();
             }
 
-            // prepare reveal
+            // Prepare reveal
             if (this.isCzar && this.roundStatus === 2 && !this.czarPicking) {
                 this.prepareReveal();
             }
