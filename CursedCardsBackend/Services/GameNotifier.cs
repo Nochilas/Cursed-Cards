@@ -15,15 +15,7 @@ public class GameNotifier(IHubContext<GameHub> hub)
             .SendAsync(
                 method: CursedCardsConstants.UPDATED_LOBBY_EVENT,
                 new LobbyDTO(state.Players, state.Czar, state.GameStarted));
-
-    /// <summary>
-    /// Game started notification event.
-    /// </summary>
-    public Task GameStartedAsync(string roomId)
-        => hub.Clients
-            .Group(roomId)
-            .SendAsync(CursedCardsConstants.GAME_STARTED_EVENT);
-
+    
     // TODO
     // public Task GameStateUpdated(GameState state)
     //     => hub.Clients

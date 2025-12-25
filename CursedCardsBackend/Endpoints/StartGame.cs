@@ -13,7 +13,7 @@ public static class StartGame
             /// Starts the game.
             /// Only the czar can call this endpoint.
             /// </summary>
-            app.MapPost("/start-game/{roomId}/{player}", (
+            app.MapPost("/start-game/{roomId}/{player}", async (
                 string roomId,
                 string player,
                 GameService gameService) =>
@@ -29,8 +29,7 @@ public static class StartGame
                     return Results.BadRequest(new ApiErrorResponse("You are not the Czar"));
                 }
 
-                gameState.GameStarted = true;
-                gameService.WriteGameState(gameState);
+                await gameService.StartGameAsync(gameState);
 
                 return Results.Ok(new ApiSuccessResponse<string>("Game started"));
             });

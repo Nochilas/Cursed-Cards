@@ -76,6 +76,18 @@ public class GameService(
     }
 
     /// <summary>
+    /// Starts the game.
+    /// </summary>
+    public async Task StartGameAsync(GameState gameState)
+    {
+        gameState.GameStarted = true;
+        WriteGameState(gameState);
+
+        // Notify
+        await gameNotifier.LobbyUpdatedAsync(gameState);
+    }
+
+    /// <summary>
     /// Draws a specific amount of cards for a specific player.
     /// </summary>
     public List<string> DrawCards(int quantity, List<string> deck)
