@@ -5,7 +5,10 @@ using CursedCardsBackend.Models;
 
 namespace CursedCardsBackend.Services;
 
-public class GameService(GameManager gameManager, JsonSerializerOptions serializerOptions)
+public class GameService(
+    GameManager gameManager,
+    GameNotifier gameNotifier,
+    JsonSerializerOptions serializerOptions)
 {
     /// <summary>
     /// Four players for now.
@@ -38,7 +41,7 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
     /// <summary>
     /// Adds a playr to a specific room.
     /// </summary>
-    public void JoinRoom(string playerName, GameState gameState)
+    public async Task JoinRoomAsync(string playerName, GameState gameState)
     {
         // Adds a player
         gameState.Players.Add(playerName);
@@ -67,6 +70,9 @@ public class GameService(GameManager gameManager, JsonSerializerOptions serializ
 
         // Update
         gameManager.Write(gameState);
+
+        // Notify
+        await gameNotifier.LobbyUpdatedAsync(gameState);
     }
 
     /// <summary>

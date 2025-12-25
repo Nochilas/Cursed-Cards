@@ -14,6 +14,7 @@ builder.Services
     })
     .AddSingleton<GameManager>()
     .AddSingleton<GameService>()
+    .AddSingleton<GameNotifier>()
     .AddSignalR();
 
 var app = builder.Build();
@@ -21,7 +22,7 @@ var app = builder.Build();
 // Serve static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.ConfigureEndpoints();
+await app.ConfigureEndpointsAsync();
 
 // SignalR
 app.MapHub<GameHub>(CursedCardsConstants.GAME_HUB_ENDPOINT);

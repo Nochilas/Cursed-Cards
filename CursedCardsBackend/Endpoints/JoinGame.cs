@@ -10,9 +10,9 @@ public static class JoinGame
         /// <summary>
         /// Allows a player to join a game.
         /// </summary>
-        public void AddJoinGameEndpoint()
+        public async Task AddJoinGameEndpointAsync()
         {
-            app.MapPost("/join-game/{roomId}/{playerName}", (
+            app.MapPost("/join-game/{roomId}/{playerName}", async (
                 string roomId,
                 string playerName,
                 GameService gameService) =>
@@ -32,7 +32,7 @@ public static class JoinGame
                 }
 
                 // Join
-                gameService.JoinRoom(playerName, gameState);
+                await gameService.JoinRoomAsync(playerName, gameState);
                 return Results.Ok(new ApiSuccessResponse<string>(playerName));
             });
         }

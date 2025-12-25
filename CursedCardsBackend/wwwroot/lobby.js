@@ -7,71 +7,48 @@ function lobby() {
         czar: "",
         gameStarted: false,
 
-        /** Inits the lobby. */
-        init() {
-            const params = new URLSearchParams(window.location.search);
-            this.roomId = params.get("roomId");
-            this.playerName = params.get("playerName");
-
-            // First loading is immediate
-            this.refresh();
-
-            // Polling every 2 seconds
-            setInterval(() => this.refresh(), 2000);
-        },
+        connection: null,
 
         get isCzar() {
             return this.czar === this.playerName;
         },
 
-        /** Refresh UI. */
-        async refresh() {
-            try {
-                // Load state
-                const res = await fetch(`/lobby-state/${this.roomId}`);
-                const data = await res.json();
+        async init() {
+            const params = new URLSearchParams(window.location.search);
+            this.roomId = params.get("roomId");
+            this.playerName = params.get("playerName");
 
-                if (!res.ok) {
-                    console.error(data.errorMessage ?? "Lobby polling error");
-                    return;
-                }
+            // Create connection
+            this.connection = new signalR.HubConnectionBuilder()
+                .withUrl("/gamehub")
+                .withAutomaticReconnect()
+                .build();
 
-                // Show players
-                const state = data.response;
-
-                this.players = state.players ?? [];
-                this.czar = state.czar ?? "";
-                this.gameStarted = state.gameStarted ?? false;
+            // Listener before starting
+            this.connection.on("LobbyUpdated", state => {
+                this.players = [...state.players];
+                this.czar = state.czar;
+                this.gameStarted = state.gameStarted;
 
                 if (this.gameStarted) {
                     this.redirectToGame();
                 }
+            });
 
-            } catch (err) {
-                console.error("Error refreshing lobby", err);
-            }
+            // Start conneciton
+            await this.connection.start();
+
+            // Enter the room
+            await this.connection.invoke("JoinRoom", this.roomId);
         },
 
-        /** Starts the game. */
         async startGame() {
-            try {
-                const res = await fetch(
-                    `/start-game/${this.roomId}/${this.playerName}`,
-                    { method: "POST" }
-                );
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    alert(data.errorMessage);
-                }
-
-            } catch (err) {
-                console.error("Error starting game", err);
-            }
+            await fetch(
+                `/start-game/${this.roomId}/${this.playerName}`,
+                { method: "POST" }
+            );
         },
 
-        /** Redirect players to game. */
         redirectToGame() {
             window.location.href =
                 `/game.html?roomId=${this.roomId}&playerName=${this.playerName}`;
