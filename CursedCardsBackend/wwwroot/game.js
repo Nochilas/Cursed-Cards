@@ -17,59 +17,39 @@ function game() {
         blanksRequired: 1,
 
         // czar flow
+        isCzar: false,
         czarRevealing: false,
         czarPicking: false,
         revealIndex: 0,
         revealOrder: [],
         shuffledPlayedCards: [],
 
-        init() {
-            const qs = new URLSearchParams(window.location.search);
-            this.roomId = qs.get("roomId");
-            this.playerName = qs.get("playerName");
+        async init() {
+            const params = new URLSearchParams(window.location.search);
+            this.roomId = params.get("roomId");
+            this.playerName = params.get("playerName");
 
-            this.loadState();
-            setInterval(() => this.loadState(), 2000);
-        },
+            this.connection = new signalR.HubConnectionBuilder()
+                .withUrl("/gamehub")
+                .withAutomaticReconnect()
+                .build();
 
-        get isCzar() {
-            return this.czar === this.playerName;
+            this.connection.on("GameUpdated", state => {
+                this.applyState(state);
+            });
+
+            this.connection.onreconnected(async () => {
+                await this.connection.invoke("JoinRoom", this.roomId);
+            });
+
+
+            await this.connection.start();
+            await this.connection.invoke("JoinRoom", this.roomId);
         },
 
         get currentReveal() {
             const player = this.revealOrder[this.revealIndex - 1];
             return player ? this.playedCards[player] : [];
-        },
-
-        async loadState() {
-            const res = await fetch(`/game-state/${this.roomId}`);
-            const data = await res.json();
-            if (!res.ok) return;
-
-            const s = data.response;
-
-            this.czar = s.czar;
-            this.roundStatus = s.roundStatus;
-            this.blackCard = s.currentBlackCard ?? "";
-            this.scores = s.scores ?? {};
-            this.playedCards = s.playedCards ?? {};
-
-            this.blanksRequired =
-                (this.blackCard.match(/_/g) || []).length || 1;
-
-            if (!this.isCzar) {
-                this.hand = s.hands?.[this.playerName] ?? [];
-            }
-
-            // RESET FLOW when round changes
-            if (this.roundStatus !== 2) {
-                this.resetCzarFlow();
-            }
-
-            // Prepare czar reveal
-            if (this.isCzar && this.roundStatus === 2 && !this.czarPicking) {
-                this.prepareReveal();
-            }
         },
 
         resetCzarFlow() {
@@ -78,7 +58,10 @@ function game() {
             this.revealIndex = 0;
             this.revealOrder = [];
             this.shuffledPlayedCards = [];
-            this.selectedCards = [];
+
+            if (this.roundStatus === 0) {
+                this.selectedCards = [];
+            }
         },
 
         toggleCard(card) {
@@ -117,7 +100,8 @@ function game() {
         },
 
         prepareReveal() {
-            if (this.revealOrder.length) return;
+            if (this.czarRevealing || this.czarPicking) return;
+            if (!Object.keys(this.playedCards).length) return;
 
             this.revealOrder = Object.keys(this.playedCards);
             this.shuffle(this.revealOrder);
@@ -149,6 +133,36 @@ function game() {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        },
+
+        applyState(state) {
+            this.czar = state.czar;
+            this.roundStatus = state.roundStatus;
+            this.blackCard = state.currentBlackCard ?? "";
+            this.scores = state.scores ?? {};
+            this.playedCards = state.playedCards ?? {};
+
+            this.blanksRequired =
+                (this.blackCard.match(/_/g) || []).length || 1;
+
+            this.isCzar = this.czar === this.playerName;
+
+            // player hand
+            if (this.czar !== this.playerName) {
+                this.hand = state.hands?.[this.playerName] ?? [];
+            } else {
+                this.hand = [];
+            }
+
+            // reset czar flow if round changed
+            if (this.roundStatus !== 2) {
+                this.resetCzarFlow();
+            }
+
+            // prepare reveal
+            if (this.isCzar && this.roundStatus === 2 && !this.czarPicking) {
+                this.prepareReveal();
             }
         }
     };
