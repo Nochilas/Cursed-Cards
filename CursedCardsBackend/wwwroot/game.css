@@ -27,7 +27,6 @@ body {
 }
 
 .czar-btn {
-    display: none;
     width: 100%;
     margin: 6px 0;
     padding: 12px;
@@ -107,7 +106,6 @@ body {
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
-    display: none;
     cursor: pointer;
 }
 

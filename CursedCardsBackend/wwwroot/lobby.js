@@ -9,9 +9,7 @@ function lobby() {
 
         connection: null,
 
-        get isCzar() {
-            return this.czar === this.playerName;
-        },
+        isCzar: false,
 
         async init() {
             const params = new URLSearchParams(window.location.search);
@@ -29,6 +27,9 @@ function lobby() {
                 this.players = [...state.players];
                 this.czar = state.czar;
                 this.gameStarted = state.gameStarted;
+
+                // UI: show Start Game button to czar only
+                this.isCzar = this.czar === this.playerName;
 
                 if (this.gameStarted) {
                     this.redirectToGame();
