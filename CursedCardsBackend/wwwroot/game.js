@@ -163,11 +163,13 @@ function game() {
                 this.hand = [];
             }
 
-            // Reset czar flow if round changed
-            if (this.roundStatus !== 2) {
-                this.resetCzarFlow();
-                return;
+            // Reset submit if a new round started
+            if (this.roundStatus === 0) {
+                this.canSubmit = true;
             }
+
+            // Reset czar flow
+            this.resetCzarFlow();
 
             // Prepare reveal
             if (this.isCzar && !this.czarPicking) {
