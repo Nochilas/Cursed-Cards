@@ -25,7 +25,6 @@
   display: flex;
   justify-content: space-evenly;
   gap: 12px;
-  margin-top: 20px;
 }
 
 /* =========================
@@ -46,13 +45,6 @@
 /* =========================
    Reveal cards (czar)
 ========================= */
-.reveal-cards {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
 .revealed-card {
   background: #000;
   color: $primary-color-hover;

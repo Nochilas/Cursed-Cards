@@ -2,6 +2,7 @@
 
 @mixin button-base {
   padding: 15px 30px;
+  margin: 6px;
   background: $primary-color;
   border: none;
   border-radius: $radius-pill;

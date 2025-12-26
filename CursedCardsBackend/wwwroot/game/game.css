@@ -1,5 +1,6 @@
 .btn {
   padding: 15px 30px;
+  margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
@@ -42,7 +43,6 @@
   display: flex;
   justify-content: space-evenly;
   gap: 12px;
-  margin-top: 20px;
 }
 
 /* =========================
@@ -50,6 +50,7 @@
 ========================= */
 .czar-btn {
   padding: 15px 30px;
+  margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
@@ -79,13 +80,6 @@
 /* =========================
    Reveal cards (czar)
 ========================= */
-.reveal-cards {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
 .revealed-card {
   background: #000;
   color: #5e35b1;
@@ -130,6 +124,7 @@
 ========================= */
 .submit-btn {
   padding: 15px 30px;
+  margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
@@ -158,6 +153,7 @@
 ========================= */
 .czar-choice-btn {
   padding: 15px 30px;
+  margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
