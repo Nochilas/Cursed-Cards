@@ -61,13 +61,13 @@
 
         <!-- Czar reveal -->
         <div x-show="czarRevealing">
-            <button class="czar-btn" @click="revealNext" x-text="revealIndex === 0 ? 'Show Cards' : 'Next'">
-            </button>
             <div class="czar-controls">
                 <template x-for="c in currentReveal" :key="c">
                     <div class="revealed-card" x-text="c"></div>
                 </template>
             </div>
+            <button class="czar-btn" @click="revealNext" x-text="revealIndex === 0 ? 'Show Cards' : 'Next'">
+            </button>
         </div>
 
         <!-- Czar pick winner -->
