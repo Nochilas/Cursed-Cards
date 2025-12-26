@@ -18,11 +18,6 @@
   opacity: 0.6;
 }
 
-/* Override container */
-.container {
-  max-width: 650px;
-}
-
 /* Override title */
 .title {
   margin-bottom: 10px;

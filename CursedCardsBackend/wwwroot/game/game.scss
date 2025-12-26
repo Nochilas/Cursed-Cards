@@ -1,11 +1,6 @@
 @use "../scss/variables" as *;
 @use "../scss/buttons";
 
-/* Override container */
-.container {
-  max-width: 650px;
-}
-
 /* Override title */
 .title {
   margin-bottom: 10px;
