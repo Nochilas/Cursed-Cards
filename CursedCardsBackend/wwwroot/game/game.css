@@ -74,6 +74,7 @@
   font-weight: 600;
   text-align: center;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 /* =========================
@@ -156,6 +157,7 @@
   width: 100%;
   margin: 6px 0;
   font-size: 1.1rem;
+  word-wrap: break-word;
 }
 
 /* =========================
