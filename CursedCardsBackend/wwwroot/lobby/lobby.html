@@ -11,6 +11,7 @@
     <!-- SignalR -->
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr/dist/browser/signalr.min.js"></script>
 
+    <link rel="stylesheet" href="../style.css" />
     <link rel="stylesheet" href="./lobby.css" />
 </head>
 
@@ -34,7 +35,7 @@
         </div>
 
         <!-- Start game: only czar -->
-        <button class="start-btn" x-show="isCzar" @click="startGame">
+        <button class="btn" x-show="isCzar" @click="startGame">
             Start Game
         </button>
     </div>

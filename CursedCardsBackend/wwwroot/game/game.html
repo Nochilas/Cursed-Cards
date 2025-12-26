@@ -10,6 +10,7 @@
 
     <!-- SignalR -->
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
     <link rel="stylesheet" href="./game.css">
 </head>
 
@@ -24,7 +25,7 @@
         <div class="black-card" x-text="blackCard || 'No black card'"></div>
 
         <!-- Czar controls -->
-        <div x-show="isCzar">
+        <div class="czar-controls" x-show="isCzar">
             <button class="czar-btn" @click="drawBlack" :disabled="blackCard || roundStatus !== 0">
                 Draw black card
             </button>
@@ -67,7 +68,7 @@
 
         <!-- Czar reveal -->
         <template x-if="czarRevealing">
-            <div>
+            <div class="czar-controls">
                 <button class="czar-btn" @click="revealNext"
                     x-text="revealIndex === 0 ? 'Show Cards' : 'Next'"></button>
 

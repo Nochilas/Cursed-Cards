@@ -1,0 +1,41 @@
+@use "../scss/variables" as *;
+@use "../scss/style.scss" as *;
+
+/* =========================
+   Room
+========================= */
+.room-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* =========================
+   Players
+========================= */
+.players-section {
+    margin-bottom: 20px;
+}
+
+.players-list {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 10px 14px;
+        margin: 6px 0;
+        border-radius: $radius-sm;
+    }
+}
+
+/* =========================
+   Czar
+========================= */
+.czar-label {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}

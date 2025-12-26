@@ -1,0 +1,109 @@
+@use "variables";
+@use "buttons";
+
+/* =========================
+   Game container
+========================= */
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2c2c45);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================
+   Text
+========================= */
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+.input {
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    width: 80%;
+    margin-bottom: 20px;
+    text-align: center;
+    outline: none;
+}
+
+.result {
+    margin-top: 25px;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* =========================
+   Buttons
+========================= */
+.btn {
+    @include buttons.button-base
+}
+
+.btn:hover {
+    background: #5e35b1;
+    transform: scale(1.05);
+}
+
+.btn:disabled {
+    background: #444;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* =========================
+   Invite link
+========================= */
+.invite-link-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.invite-link-box input {
+    width: 100%;
+    max-width: 420px;
+    padding: 6px 8px;
+    font-family: monospace;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #111;
+    color: #eee;
+}
+
+.invite-link-box button {
+    cursor: pointer;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    background: #222;
+    color: #eee;
+    font-size: 16px;
+}
+
+.invite-link-box button:hover {
+    background: #333;
+}
