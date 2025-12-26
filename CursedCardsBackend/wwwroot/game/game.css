@@ -135,9 +135,18 @@ body {
 }
 
 .scoreboard {
-    margin-top: 20px;
-    padding: 12px;
-    border: 2px solid #333;
+    margin-top: 24px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: #673ab7;
+    border-left: 5px solid #000;
+}
+
+.scoreboard h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #fff;
+    letter-spacing: 0.5px;
 }
 
 .scoreboard ul {
@@ -147,8 +156,12 @@ body {
 }
 
 .scoreboard li {
-    padding: 4px 0;
-    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-weight: 500;
+    color: #fff;
+    border-bottom: 1px solid black;
 }
 
 .winner-banner {
