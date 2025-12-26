@@ -19,6 +19,12 @@ builder.Services
 
 var app = builder.Build();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/homepage/index.html");
+    return Task.CompletedTask;
+});
+
 // Serve static files
 app.UseDefaultFiles();
 app.UseStaticFiles();

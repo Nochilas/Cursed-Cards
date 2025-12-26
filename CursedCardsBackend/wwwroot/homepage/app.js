@@ -22,7 +22,7 @@ function createGame() {
                 }
 
                 this.inviteLink =
-                    `${window.location.origin}/join.html?roomId=${data.response}`;
+                    `${window.location.origin}/join/join.html?roomId=${data.response}`;
 
             } catch (err) {
                 this.error = "An error occurred while creating the game.";

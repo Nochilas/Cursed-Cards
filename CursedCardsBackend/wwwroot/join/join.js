@@ -51,7 +51,7 @@ function joinGame() {
 
                 // Redirect to lobby
                 window.location.href =
-                    `/lobby.html?roomId=${this.roomId}&playerName=${data.response}`;
+                    `/lobby/lobby.html?roomId=${this.roomId}&playerName=${data.response}`;
 
             } catch (err) {
                 this.error = "An error occurred while joining the game.";

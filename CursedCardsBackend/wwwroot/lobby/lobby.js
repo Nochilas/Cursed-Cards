@@ -56,7 +56,7 @@ function lobby() {
 
         redirectToGame() {
             window.location.href =
-                `/game.html?roomId=${this.roomId}&playerName=${this.playerName}`;
+                `/game/game.html?roomId=${this.roomId}&playerName=${this.playerName}`;
         }
     };
 }
