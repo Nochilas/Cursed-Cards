@@ -91,6 +91,11 @@
             </div>
         </template>
 
+        <!-- Winner banner -->
+        <div x-show="showWinnerBanner" class="winner-banner">
+            Winner: <strong x-text="winnerMessage"></strong>
+        </div>
+
         <!-- Scoreboard -->
         <div class="scoreboard">
             <h3>Scores</h3>

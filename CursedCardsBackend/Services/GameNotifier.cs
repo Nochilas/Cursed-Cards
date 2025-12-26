@@ -23,4 +23,12 @@ public class GameNotifier(IHubContext<GameHub> hub)
         => await hub.Clients
             .Group(state.RoomId)
             .SendAsync(Events.UPDATED_GAME_EVENT, state);
+
+    /// <summary>
+    /// Notifies the chosen winner.
+    /// </summary>
+    public async Task WinnerChosenAsync(string roomId, string winnerPlayer)
+        => await hub.Clients
+            .Group(roomId)
+            .SendAsync(Events.WINNER_CHOSEN, winnerPlayer);
 }

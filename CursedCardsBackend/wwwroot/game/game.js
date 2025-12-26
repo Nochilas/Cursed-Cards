@@ -25,6 +25,10 @@ function game() {
         revealOrder: [],
         shuffledPlayedCards: [],
 
+        // Winner
+        winnerMessage: "",
+        showWinnerBanner: false,
+
         async init() {
             const params = new URLSearchParams(window.location.search);
             this.roomId = params.get("roomId");
@@ -37,6 +41,10 @@ function game() {
 
             this.connection.on("GameUpdated", state => {
                 this.applyState(state);
+            });
+
+            this.connection.on("WinnerChosen", winner => {
+                this.showWinner(winner);
             });
 
             this.connection.onreconnected(async () => {
@@ -193,6 +201,17 @@ function game() {
                 && !this.czarRevealing) {
                 this.prepareReveal();
             }
+        },
+
+        showWinner(winner) {
+            this.winnerMessage = winner;
+            this.showWinnerBanner = true;
+
+            setTimeout(() => {
+                this.showWinnerBanner = false;
+                this.winnerMessage = "";
+            }, 2000);
         }
+
     };
 }

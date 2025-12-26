@@ -48,7 +48,7 @@ public static class SelectWinner
                         ErrorMessage: ErrorMessages.PLAYER_NOT_FOUND);
                 }
 
-                await gameService.SelectWinnerAsync(winnerPlayer, gameState);
+                await gameService.SelectWinnerAsync(roomId, winnerPlayer, gameState);
                 return new ApiResponse<string>(Response: SuccessMessages.WINNER_SELECTED);
             });
         }
