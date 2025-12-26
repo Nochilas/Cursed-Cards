@@ -1,60 +1,60 @@
-@use "variables";
+@use "variables" as *;
 @use "buttons";
 
 /* =========================
-   Game container
+   Layout
 ========================= */
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #2c2c45);
-    height: 100vh;
+    font-family: $font-base;
+    background: linear-gradient($gradient-deg, $bg-dark-1, $bg-dark-2);
+    height: $body-height;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: $text-color;
 }
 
 .container {
-    max-width: 650px;
-    min-width: 300px;
+    max-width: $max-width-lg;
+    min-width: $min-width-lg;
     text-align: center;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: $space-lg;
+    background: $surface-glass;
+    border-radius: $radius-lg;
+    backdrop-filter: blur($blur-md);
+    box-shadow: $shadow-soft;
 }
 
 /* =========================
    Text
 ========================= */
 .title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: $title-font-size;
+    margin-bottom: $space-md;
 }
 
 .subtitle {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    margin-bottom: 20px;
+    font-size: $subtitle-font-size;
+    opacity: $opacity_active;
+    margin-bottom: $space-md;
 }
 
 .input {
-    padding: 12px 18px;
-    font-size: 1rem;
-    border-radius: 10px;
+    padding: $space-sm $space-md;
+    font-size: $input-font-size;
+    border-radius: $radius-md;
     border: none;
-    width: 80%;
-    margin-bottom: 20px;
+    width: $input-width;
+    margin-bottom: $space-md;
     text-align: center;
     outline: none;
 }
 
 .result {
-    margin-top: 25px;
-    font-size: 1.2rem;
-    opacity: 0.9;
+    margin-top: $space-md;
+    font-size: $subtitle-font-size;
+    opacity: $opacity_active;
 }
 
 /* =========================
@@ -64,48 +64,37 @@ body {
     @include buttons.button-base
 }
 
-.btn:hover {
-    background: #5e35b1;
-    transform: scale(1.05);
-}
-
-.btn:disabled {
-    background: #444;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
 /* =========================
    Invite link
 ========================= */
 .invite-link-box {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-}
+    gap: $space-sm;
+    margin-top: $space-sm;
 
-.invite-link-box input {
-    width: 100%;
-    max-width: 420px;
-    padding: 6px 8px;
-    font-family: monospace;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background: #111;
-    color: #eee;
-}
+    input {
+        width: 100%;
+        max-width: $max-width-md;
+        padding: $space-xs $space-sm;
+        font-family: monospace;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        background: $surface-dark;
+        color: $text-color;
+    }
 
-.invite-link-box button {
-    cursor: pointer;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    background: #222;
-    color: #eee;
-    font-size: 16px;
-}
+    button {
+        cursor: pointer;
+        padding: $space-xs $space-sm;
+        border: none;
+        border-radius: $radius-sm;
+        background: $surface-dark-2;
+        color: $text-color;
+        font-size: $button-font-size;
 
-.invite-link-box button:hover {
-    background: #333;
+        &:hover {
+            background: $surface-dark-3;
+        }
+    }
 }

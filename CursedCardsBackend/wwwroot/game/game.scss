@@ -1,62 +1,65 @@
 @use "../scss/variables" as *;
 @use "../scss/buttons";
 
-/* Override title */
+/* =========================
+   Overrides
+========================= */
 .title {
-  margin-bottom: 10px;
+  margin-bottom: $space-sm;
 }
 
 /* =========================
    Black card
 ========================= */
 .black-card {
-  background: #000;
+  background: $card-bg-dark;
   color: $text-color;
-  padding: 20px;
+  padding: $space-md;
+  margin: $space-md 0;
   border-radius: $radius-md;
-  margin: 20px 0;
-  font-size: 1.4rem;
+  font-size: $subtitle-font-size;
 }
 
 /* =========================
-    Czar controls
+   Czar controls
 ========================= */
 .czar-controls {
   display: flex;
   justify-content: space-evenly;
-  gap: 12px;
+  gap: $space-sm;
 }
 
 /* =========================
-   Base button extension
+   Czar button
 ========================= */
 .czar-btn {
   @include buttons.button-base;
 
-  min-width: 180px;
-  max-width: 260px;
-  padding: 16px 20px;
-  font-size: 1rem;
+  min-width: $min-width-sm;
+  max-width: $max-width-sm;
+  padding: $space-sm $space-md;
+  font-size: $subtitle-font-size;
 
   border: 2px solid $primary-color-hover;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: $shadow-medium;
 }
 
 /* =========================
-   Reveal cards (czar)
+   Revealed cards
 ========================= */
 .revealed-card {
-  background: #000;
+  background: $card-bg-dark;
   color: $primary-color-hover;
-  padding: 16px 20px;
-  min-width: 180px;
-  max-width: 260px;
+
+  min-width: $min-width-sm;
+  max-width: $max-width-sm;
+  padding: $space-sm $space-md;
 
   border-radius: $radius-md;
   border: 2px solid $primary-color-hover;
-  box-shadow: 0 6px 14px rgba(103, 58, 183, 0.5);
+  box-shadow: $shadow-strong;
 
-  font-size: 1rem;
+  font-size: $subtitle-font-size;
   font-weight: 600;
   text-align: center;
   line-height: 1.4;
@@ -68,22 +71,24 @@
 .hand {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: $space-sm;
 }
 
 .card {
-  background: #fff;
-  color: #000;
-  padding: 12px;
+  background: $card-bg-light;
+  color: $card-bg-dark;
+
+  width: $min-width-sm;
+  padding: $space-sm;
   border-radius: $radius-sm;
-  width: 140px;
+
   cursor: pointer;
   user-select: none;
   overflow-wrap: break-word;
   transition: $transition-fast;
 
   &.selected {
-    border: 3px solid #00e676;
+    border: 3px solid $selection-green;
   }
 }
 
@@ -94,8 +99,8 @@
   @include buttons.button-base;
 
   width: 100%;
-  margin-top: 16px;
-  font-size: 1.1rem;
+  margin-top: $space-sm;
+  font-size: $subtitle-font-size;
 }
 
 /* =========================
@@ -105,23 +110,24 @@
   @include buttons.button-base;
 
   width: 100%;
-  margin: 6px 0;
-  font-size: 1rem;
+  margin: $space-xs 0; 
+  font-size: $subtitle-font-size;
 }
 
 /* =========================
    Scoreboard
 ========================= */
 .scoreboard {
-  margin-top: 24px;
-  padding: 14px 16px;
-  background: rgba(103, 58, 183, 0.9);
+  margin-top: $space-md;
+  padding: $space-sm $space-md;
+
+  background: rgba($primary-color, 0.9);
   border-radius: $radius-md;
-  border-left: 5px solid #000;
+  border-left: 5px solid $card-bg-dark;
 
   h3 {
-    margin-bottom: 10px;
-    font-size: 1.1rem;
+    margin-bottom: $space-sm;
+    font-size: $subtitle-font-size;
     letter-spacing: 0.5px;
   }
 
@@ -134,9 +140,9 @@
   li {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+    padding: $space-xs 0;
     font-weight: 500;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid $border-color;
   }
 }
 
@@ -144,11 +150,13 @@
    Winner banner
 ========================= */
 .winner-banner {
-  margin: 20px 0;
-  padding: 14px;
+  margin: $space-md 0;
+  padding: $space-sm;
+
   text-align: center;
-  background: #2e7d32;
-  color: white;
-  font-size: 1.2rem;
+  background: $success-color;
+  color: $text-color;
+
+  font-size: $subtitle-font-size;
   border-radius: $radius-sm;
 }

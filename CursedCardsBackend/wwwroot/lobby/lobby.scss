@@ -6,16 +6,16 @@
 ========================= */
 .room-info {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    opacity: 0.9;
+    margin-bottom: $space-md;
+    font-size: $subtitle-font-size;
+    opacity: $opacity_active;
 }
 
 /* =========================
    Players
 ========================= */
 .players-section {
-    margin-bottom: 20px;
+    margin-bottom: $space-md;
 }
 
 .players-list {
@@ -23,9 +23,9 @@
     padding-left: 0;
 
     li {
-        background: rgba(255, 255, 255, 0.08);
-        padding: 10px 14px;
-        margin: 6px 0;
+        background: $text-muted;
+        padding: $space-sm;
+        margin: $space-xs 0;
         border-radius: $radius-sm;
     }
 }
@@ -34,8 +34,8 @@
    Czar
 ========================= */
 .czar-label {
-    font-size: 1.1rem;
+    font-size: $subtitle-font-size;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: $space-md;
     font-weight: bold;
 }

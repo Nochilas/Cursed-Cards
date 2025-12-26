@@ -1,25 +1,6 @@
-.btn {
-  padding: 15px 30px;
-  margin: 6px;
-  background: #673ab7;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.btn:hover {
-  background: #5e35b1;
-  transform: scale(1.05);
-}
-.btn:disabled {
-  background: #444;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Override title */
+/* =========================
+   Overrides
+========================= */
 .title {
   margin-bottom: 10px;
 }
@@ -31,31 +12,31 @@
   background: #000;
   color: #fff;
   padding: 20px;
-  border-radius: 10px;
   margin: 20px 0;
-  font-size: 1.4rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
 }
 
 /* =========================
-    Czar controls
+   Czar controls
 ========================= */
 .czar-controls {
   display: flex;
   justify-content: space-evenly;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* =========================
-   Base button extension
+   Czar button
 ========================= */
 .czar-btn {
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
+  font-size: 1.1rem;
+  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -71,25 +52,25 @@
 .czar-btn {
   min-width: 180px;
   max-width: 260px;
-  padding: 16px 20px;
-  font-size: 1rem;
+  padding: 10px 20px;
+  font-size: 1.1rem;
   border: 2px solid #5e35b1;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 /* =========================
-   Reveal cards (czar)
+   Revealed cards
 ========================= */
 .revealed-card {
   background: #000;
   color: #5e35b1;
-  padding: 16px 20px;
   min-width: 180px;
   max-width: 260px;
+  padding: 10px 20px;
   border-radius: 10px;
   border: 2px solid #5e35b1;
   box-shadow: 0 6px 14px rgba(103, 58, 183, 0.5);
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   text-align: center;
   line-height: 1.4;
@@ -107,9 +88,9 @@
 .card {
   background: #fff;
   color: #000;
-  padding: 12px;
+  width: 180px;
+  padding: 10px;
   border-radius: 4px;
-  width: 140px;
   cursor: pointer;
   user-select: none;
   overflow-wrap: break-word;
@@ -123,13 +104,13 @@
    Submit button
 ========================= */
 .submit-btn {
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
+  font-size: 1.1rem;
+  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -144,7 +125,7 @@
 }
 .submit-btn {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 10px;
   font-size: 1.1rem;
 }
 
@@ -152,13 +133,13 @@
    Czar winner choice
 ========================= */
 .czar-choice-btn {
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
+  font-size: 1.1rem;
+  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -174,15 +155,15 @@
 .czar-choice-btn {
   width: 100%;
   margin: 6px 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 /* =========================
    Scoreboard
 ========================= */
 .scoreboard {
-  margin-top: 24px;
-  padding: 14px 16px;
+  margin-top: 20px;
+  padding: 10px 20px;
   background: rgba(103, 58, 183, 0.9);
   border-radius: 10px;
   border-left: 5px solid #000;
@@ -202,7 +183,7 @@
   justify-content: space-between;
   padding: 6px 0;
   font-weight: 500;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid #444;
 }
 
 /* =========================
@@ -210,11 +191,11 @@
 ========================= */
 .winner-banner {
   margin: 20px 0;
-  padding: 14px;
+  padding: 10px;
   text-align: center;
   background: #2e7d32;
-  color: white;
-  font-size: 1.2rem;
+  color: #fff;
+  font-size: 1.1rem;
   border-radius: 4px;
 }
 

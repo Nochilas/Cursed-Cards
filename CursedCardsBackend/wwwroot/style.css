@@ -1,26 +1,5 @@
-.btn {
-  padding: 15px 30px;
-  margin: 6px;
-  background: #673ab7;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.btn:hover {
-  background: #5e35b1;
-  transform: scale(1.05);
-}
-.btn:disabled {
-  background: #444;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
 /* =========================
-   Game container
+   Layout
 ========================= */
 body {
   font-family: "Inter", sans-serif;
@@ -30,7 +9,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #fff;
 }
 
 .container {
@@ -59,7 +38,7 @@ body {
 }
 
 .input {
-  padding: 12px 18px;
+  padding: 10px 20px;
   font-size: 1rem;
   border-radius: 10px;
   border: none;
@@ -70,22 +49,22 @@ body {
 }
 
 .result {
-  margin-top: 25px;
-  font-size: 1.2rem;
-  opacity: 0.9;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  opacity: 0.8;
 }
 
 /* =========================
    Buttons
 ========================= */
 .btn {
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 6px;
   background: #673ab7;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
-  color: white;
+  font-size: 1.1rem;
+  color: #fff;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -99,48 +78,34 @@ body {
   opacity: 0.6;
 }
 
-.btn:hover {
-  background: #5e35b1;
-  transform: scale(1.05);
-}
-
-.btn:disabled {
-  background: #444;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
 /* =========================
    Invite link
 ========================= */
 .invite-link-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-top: 10px;
 }
-
 .invite-link-box input {
   width: 100%;
-  max-width: 420px;
-  padding: 6px 8px;
+  max-width: 400px;
+  padding: 6px 10px;
   font-family: monospace;
   border: 1px solid #444;
   border-radius: 4px;
   background: #111;
-  color: #eee;
+  color: #fff;
 }
-
 .invite-link-box button {
   cursor: pointer;
   padding: 6px 10px;
   border: none;
   border-radius: 4px;
   background: #222;
-  color: #eee;
+  color: #fff;
   font-size: 16px;
 }
-
 .invite-link-box button:hover {
   background: #333;
 }

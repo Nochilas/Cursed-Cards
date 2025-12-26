@@ -1,3 +1,4 @@
+// Colors
 $primary-color: #673ab7;
 $primary-color-hover: #5e35b1;
 
@@ -5,10 +6,65 @@ $bg-dark-1: #1e1e2f;
 $bg-dark-2: #2c2c45;
 
 $text-color: #fff;
+$text-muted: rgba(255, 255, 255, 0.8);
 
+$surface-glass: rgba(255, 255, 255, 0.05);
+$surface-dark: #111;
+$surface-dark-2: #222;
+$surface-dark-3: #333;
+
+$border-color: #444;
+
+// Radius
 $radius-sm: 4px;
 $radius-md: 10px;
 $radius-lg: 20px;
 $radius-pill: 50px;
 
+// Spacing
+$body-height: 100vh;
+
+$space-xs: 6px;
+$space-sm: 10px;
+$space-md: 20px;
+$space-lg: 30px;
+
+$input-width: 80%;
+
+$min-width-sm: 180px;
+$min-width-lg: 300px;
+
+$max-width-sm: 260px;
+$max-width-md: 400px;
+$max-width-lg: 650px;
+
+// Typography
+$button-font-size: 16px;
+$font-base: 'Inter', sans-serif;
+$title-font-size: 2.5rem;
+$subtitle-font-size: 1.1rem;
+$input-font-size: 1rem;
+
+// Effects
+$blur-md: 12px;
+$gradient-deg: 135deg;
+$opacity_active: 0.8;
+$opacity_disabled: 0.6;
+$scale-transform: 1.05;
+$shadow-soft: 0 0 20px rgba(0, 0, 0, 0.3);
+$text-muted: rgba(255, 255, 255, 0.08);
+
+// Motion
 $transition-fast: 0.2s;
+
+// Cards
+$card-bg-dark: #000;
+$card-bg-light: #fff;
+
+// Accents
+$success-color: #2e7d32;
+$selection-green: #00e676;
+
+// Shadows
+$shadow-strong: 0 6px 14px rgba(103, 58, 183, 0.5);
+$shadow-medium: 0 2px 6px rgba(0, 0, 0, 0.4);
