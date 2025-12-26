@@ -163,14 +163,17 @@
 ========================= */
 .scoreboard {
   margin-top: 20px;
-  padding: 10px 20px;
-  background: rgba(103, 58, 183, 0.9);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  border-left: 5px solid #000;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 .scoreboard h3 {
-  margin-bottom: 10px;
+  margin: 0 0 10px;
   font-size: 1.1rem;
+  color: #fff;
+  opacity: 0.8;
   letter-spacing: 0.5px;
 }
 .scoreboard ul {
@@ -181,9 +184,14 @@
 .scoreboard li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 6px 0;
   font-weight: 500;
-  border-bottom: 1px solid #444;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.scoreboard li:last-child {
+  border-bottom: none;
 }
 
 /* =========================

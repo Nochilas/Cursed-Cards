@@ -110,7 +110,7 @@
   @include buttons.button-base;
 
   width: 100%;
-  margin: $space-xs 0; 
+  margin: $space-xs 0;
   font-size: $subtitle-font-size;
 }
 
@@ -119,15 +119,18 @@
 ========================= */
 .scoreboard {
   margin-top: $space-md;
-  padding: $space-sm $space-md;
+  padding: $space-md;
 
-  background: rgba($primary-color, 0.9);
+  background: $surface-glass;
   border-radius: $radius-md;
-  border-left: 5px solid $card-bg-dark;
+  backdrop-filter: blur($blur-md);
+  box-shadow: $shadow-soft;
 
   h3 {
-    margin-bottom: $space-sm;
+    margin: 0 0 $space-sm;
     font-size: $subtitle-font-size;
+    color: $text-color;
+    opacity: $opacity_active;
     letter-spacing: 0.5px;
   }
 
@@ -140,11 +143,20 @@
   li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
     padding: $space-xs 0;
     font-weight: 500;
-    border-bottom: 1px solid $border-color;
+    color: $text-color;
+
+    border-bottom: 1px solid rgba($text-color, 0.15);
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }
+
 
 /* =========================
    Winner banner
