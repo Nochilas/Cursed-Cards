@@ -6,6 +6,7 @@ namespace CursedCardsBackend.Managers;
 public class GameManager(JsonSerializerOptions serializerOptions)
 {
     private readonly string _currenGameStatePath = "currentGameState.json";
+    private readonly string _empty = "{}";
 
     /// <summary>
     /// Reads the current game state.
@@ -14,7 +15,7 @@ public class GameManager(JsonSerializerOptions serializerOptions)
     {
         if (!File.Exists(_currenGameStatePath))
         {
-            File.WriteAllText(_currenGameStatePath, "{}");
+            File.WriteAllText(_currenGameStatePath, _empty);
         }
 
         var text = File.ReadAllText(_currenGameStatePath);
